@@ -1,7 +1,8 @@
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Celica {
+public class Celica  {
     private float preTemp;
     private float nowTemp;
     public Boolean isHeatSource;

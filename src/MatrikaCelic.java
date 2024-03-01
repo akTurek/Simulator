@@ -32,6 +32,10 @@ public class MatrikaCelic {
         return matrikaCelic;
     }
 
+    public Celica getCelica (int i, int j){
+        return matrikaCelic[i][j];
+    }
+
     private Celica[][] narediMatriko() {
         Celica[][] m = new Celica[this.row][this.col];
         for (int i = 0; i < row; i++) {
@@ -138,6 +142,77 @@ public class MatrikaCelic {
 
     public float tempChange(int i, int j){
         return Math.abs(matrikaCelic[i][j].getNowTemp()-matrikaCelic[i][j].getPreTemp());
+    }
+
+    public float [] matrikaToArrayPrevTemp(){
+        float[] arrayPrevTemp = new float[row * col];
+
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                arrayPrevTemp[i * col + j] = matrikaCelic[i][j].getPreTemp();
+            }
+        }
+
+        return arrayPrevTemp;
+    }
+    public float [] matrikaToArrayNowTemp(){
+        float[] arrayNowTemp = new float[row * col];
+
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                arrayNowTemp[i * col + j] = matrikaCelic[i][j].getNowTemp();
+            }
+        }
+
+        return arrayNowTemp;
+    }
+
+    public boolean [] matrikaToArrayIsHeatSource(){
+        boolean[] arrayIsHeatSourc = new boolean [row * col];
+
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                arrayIsHeatSourc[i * col + j] = matrikaCelic[i][j].isHeatSource;
+            }
+        }
+
+        return arrayIsHeatSourc;
+    }
+
+    public void arraysToMatrika(float[] arrayNowTemp, float[] arrayPrevTemp){
+
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                matrikaCelic[i][j].setPreTemp(arrayPrevTemp[i * col + j]);
+                matrikaCelic[i][j].setNowTemp(arrayNowTemp[i * col + j]);
+            }
+        }
+
+    }
+
+    public static Celica[][] matrikaToMejneVrednosti(Celica[][] matrikaCelic, int rows, int cols, int size){
+        int rowsPerProcess = rows/size;
+        int stMejnihRows = (size*2)-2;
+
+        int startRow =0;
+        int endRow = startRow + rowsPerProcess - 1;
+
+        Celica[][] mejneVrednosti = new Celica[stMejnihRows][cols];
+
+        mejneVrednosti[0]=matrikaCelic[endRow];
+        startRow = startRow+ rowsPerProcess;
+        endRow = endRow + rowsPerProcess;
+
+        for (int i = 1; i < stMejnihRows - 1; i += 2) {
+            mejneVrednosti[i] = matrikaCelic[startRow];
+            mejneVrednosti[i + 1] = matrikaCelic[endRow];
+            startRow += rowsPerProcess;
+            endRow += rowsPerProcess;
+        }
+
+        mejneVrednosti[stMejnihRows-1]=matrikaCelic[startRow];
+
+        return mejneVrednosti;
     }
 
 }

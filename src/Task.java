@@ -114,11 +114,24 @@ class Task implements Runnable {
             //System.out.println();
 
 
+                System.out.println(
+                        " Nit  "+taskId+" tocka "+2+" ima temperaturo "+multi.matrikaCelic.getMatrikaCelic()[5][2].getNowTemp());
+                try {
+                    cyclicBarrier.await();
+                } catch (InterruptedException | BrokenBarrierException e) {
+                    Thread.currentThread().interrupt();
+                    System.err.println("Thread interrupted or barrier broken");
+                }
+
+
+
+
+            System.out.println();
+
+
         } while (!lock(multi.areAllTasksOverArr));
 
-            System.out.println("Task " + taskId + " is finised with max Temp change "+maxTempChanfe() +
-                " Tocka 6 6 ima temperaturo "+multi.matrikaCelic.getMatrikaCelic()[6][6].getNowTemp()+
-                    " Tocka 600 400 ima temperaturo "+multi.matrikaCelic.getMatrikaCelic()[600][400].getNowTemp());
+
     }
 
 }
