@@ -10,7 +10,10 @@ public class Distributivno {
 
 
             int rows = 100; // Number of rows
-            int cols = 40; // Number of columns
+            int cols = 100; // Number of columns
+            int heatSources = 10; // Number of columns
+
+            long t0 = System.currentTimeMillis();
 
 
 
@@ -33,6 +36,8 @@ public class Distributivno {
             recvcounts[size-1] = (rowsPerProcess + remainderRows) * cols;
 
             MatrikaCelicDistributivno arrDis = new MatrikaCelicDistributivno(recvcounts[rank], cols);
+        System.out.println("Dolzina arraya v disarry "+arrDis.getArrayNowTemp().length+" Rank "+rank);
+        System.out.println(" st cols "+cols);
 
 
 
@@ -47,11 +52,18 @@ public class Distributivno {
                 float[] lowLimitPrevTemp = new float[cols];
                 float[] upLimitPrevTemp = new float[cols];
 
+
+                int[] recvIsOverInt = new int[1];
+                int[] sendIsOverInt = new int[1];
+
+                boolean isOver = false;
+
                 System.out.println(size);
                 System.out.println("Rank " + rank + " recvcounts vrednost " + recvcounts[rank]);
 
 
-                MatrikaCelic matrikaCelic = new MatrikaCelic(rows, cols, 10, 100);
+
+                MatrikaCelic matrikaCelic = new MatrikaCelic(rows, cols, heatSources, 100);
                 float[] sendArrayNowTemp = matrikaCelic.matrikaToArrayNowTemp();
                 float[] sendArrayPrevTemp = matrikaCelic.matrikaToArrayPrevTemp();
                 boolean[] sendArrayIsHeatSource = matrikaCelic.matrikaToArrayIsHeatSource();
@@ -67,44 +79,118 @@ public class Distributivno {
                 MPI.COMM_WORLD.Barrier();
 
 
-
-
-            arrDis.setArrays(arrayPrevTemp, arrayNowTemp, arrayIsHeatSource);
+                arrDis.setArrays(arrayPrevTemp, arrayNowTemp, arrayIsHeatSource);
 
         System.out.println("opravil scater");
 
-        //poslji in prejme mejne vrednosti
-        if (rank != size-1){
-            MPI.COMM_WORLD.Send(arrayNowTemp, recvcounts[rank] - cols, cols, MPI.FLOAT, rank + 1, 1);
-            MPI.COMM_WORLD.Send(arrayPrevTemp, recvcounts[rank] - cols, cols, MPI.FLOAT, rank + 1, 0);
+        while (!isOver) {
+
+            isOver = true;
+
+            //poslji in prejme mejne vrednosti
+            if (rank != size - 1) {
+                MPI.COMM_WORLD.Send(arrayNowTemp, recvcounts[rank] - cols, cols, MPI.FLOAT, rank + 1, 1);
+                MPI.COMM_WORLD.Send(arrayPrevTemp, recvcounts[rank] - cols, cols, MPI.FLOAT, rank + 1, 0);
+            }
+            if (rank != 0) {
+                MPI.COMM_WORLD.Recv(lowLimitNowTemp, 0, cols, MPI.FLOAT, rank - 1, 1);
+                MPI.COMM_WORLD.Recv(lowLimitPrevTemp, 0, cols, MPI.FLOAT, rank - 1, 0);
+            }
+            MPI.COMM_WORLD.Barrier();
+
+            if (rank != 0) {
+                MPI.COMM_WORLD.Send(arrayNowTemp, 0, cols, MPI.FLOAT, rank - 1, 1);
+                MPI.COMM_WORLD.Send(arrayPrevTemp, 0, cols, MPI.FLOAT, rank - 1, 0);
+            }
+            if (rank != size - 1) {
+                MPI.COMM_WORLD.Recv(upLimitNowTemp, 0, cols, MPI.FLOAT, rank + 1, 1);
+                MPI.COMM_WORLD.Recv(upLimitPrevTemp, 0, cols, MPI.FLOAT, rank + 1, 0);
+            }
+            MPI.COMM_WORLD.Barrier();
+            System.out.println("Dolzina mejnih vrednosti " + lowLimitNowTemp.length);
+
+            arrDis.setLimits(lowLimitPrevTemp, upLimitPrevTemp, lowLimitNowTemp, upLimitNowTemp);
+            if (rank == 0) {
+                sendIsOverInt[0] = arrDis.enCikelSumulacijeFirst();
+                if (sendIsOverInt[0]==0){
+                    isOver=false;
+                }
+            } else if (rank != size - 1) {
+                sendIsOverInt[0] = arrDis.enCikelSumulacijeMiddle();
+            } else {
+                sendIsOverInt[0] = arrDis.enCikelSumulacijeLast();
+            }
+
+            System.out.println("Izracunal en cikel");
+
+
+            arrayNowTemp = arrDis.getArrayNowTemp();
+            arrayPrevTemp = arrDis.getArrayPrevTemp();
+            MPI.COMM_WORLD.Barrier();
+
+            if (rank > 0) {
+                System.out.println("poslal vrednost is over " + sendIsOverInt[0] + " rank " + rank);
+                MPI.COMM_WORLD.Send(sendIsOverInt, 0, 1, MPI.INT, 0, 2); // Send integer
+            }
+
+
+            if (rank == 0) {
+
+                for (int i = 1; i < size; i++) {
+                    MPI.COMM_WORLD.Recv(recvIsOverInt, 0, 1, MPI.INT, i, 2); // Receive integer
+                    if (recvIsOverInt[0] == 0) {
+                        isOver = false;
+                    }
+                }
+                System.out.println("preracunal is over "+isOver);
+            }
+            MPI.COMM_WORLD.Barrier();
+            if (rank == 0) {
+                if (!isOver){
+                    sendIsOverInt[0]=0;
+                }
+                System.out.println("poslal preracunano vrednost is over " + sendIsOverInt[0] + " rank " + rank);
+                for (int i = 1; i < size; i++) {
+                    MPI.COMM_WORLD.Send(sendIsOverInt, 0, 1, MPI.INT, i, 2); // Send integer
+                }
+            }
+
+
+            if (rank > 0) {
+                MPI.COMM_WORLD.Recv(recvIsOverInt, 0, 1, MPI.INT, 0, 2); // Receive integer
+                if (recvIsOverInt[0] == 0) {
+                    isOver = false;
+                }
+                System.out.println("prejel preracunal is over " + isOver + " " + rank);
+            }
+
+            System.out.println("skoraj zakljucil z racunanjem "+rank+" rezultat is over " +isOver);
+            MPI.COMM_WORLD.Barrier();
         }
-        if (rank != 0){
-            MPI.COMM_WORLD.Recv(lowLimitNowTemp, 0, cols, MPI.FLOAT, rank - 1, 1);
-            MPI.COMM_WORLD.Recv(lowLimitPrevTemp, 0, cols, MPI.FLOAT, rank - 1, 0);
-        }
-        MPI.COMM_WORLD.Barrier();
 
-        if (rank != 0){
-            MPI.COMM_WORLD.Send(arrayNowTemp, 0, cols, MPI.FLOAT, rank - 1, 1);
-            MPI.COMM_WORLD.Send(arrayPrevTemp, 0, cols, MPI.FLOAT, rank - 1, 0);
-        }
-        if (rank != size-1){
-            MPI.COMM_WORLD.Recv(upLimitNowTemp, 0, cols, MPI.FLOAT, rank + 1, 1);
-            MPI.COMM_WORLD.Recv(upLimitPrevTemp, 0, cols, MPI.FLOAT, rank + 1, 0);
-        }
-        MPI.COMM_WORLD.Barrier();
+        System.out.println("zakljucil z racunanjem "+rank+" rezultat is over " +isOver);
 
+        MPI.COMM_WORLD.Gatherv(arrayNowTemp, 0, recvcounts[rank], MPI.FLOAT, sendArrayNowTemp, 0, recvcounts, displs, MPI.FLOAT, 0);
+        MPI.COMM_WORLD.Gatherv(arrayPrevTemp, 0, recvcounts[rank], MPI.FLOAT, sendArrayPrevTemp, 0, recvcounts, displs, MPI.FLOAT, 0);
+        MPI.COMM_WORLD.Gatherv(arrayIsHeatSource, 0, recvcounts[rank], MPI.BOOLEAN, sendArrayIsHeatSource, 0, recvcounts, displs, MPI.BOOLEAN, 0);
 
-
-
-
-
-
+       if (rank==0){
+           matrikaCelic.arraysToMatrika(sendArrayNowTemp, sendArrayPrevTemp);
+           matrikaCelic.printMatriko();
+       }
 
 
 
         MPI.Finalize();
 
+
+
+
+
+
+
+        long t1 = System.currentTimeMillis();
+        System.out.println("Trajanje programa v ms: " +(t1-t0));
 
 
 

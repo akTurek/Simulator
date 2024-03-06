@@ -28,7 +28,7 @@ public class Multi {
         ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
 
         // Submit tasks to the thread pool
-        for (int i = 0; i < numberOfThreads-2; i++) {
+        for (int i = 0; i < numberOfThreads; i++) {
             // Each task operates on the same shared object
             Runnable task = new Task(this, i, cyclicBarrier);
             executorService.submit(task);
