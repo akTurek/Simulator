@@ -3,19 +3,19 @@ import java.util.concurrent.*;
 public class Multi {
     public MatrikaCelic matrikaCelic;
     public int numberOfThreads;
-    public int [] wait;
-    public int [] areAllTasksOverArr;
+    public int[] wait;
+    public int[] areAllTasksOverArr;
 
 
     public Multi(int row, int col, int numOfHeat, double time, int numberOfThreads) {
         this.matrikaCelic = new MatrikaCelic(row, col, numOfHeat, time);
         this.numberOfThreads = numberOfThreads;
-        this.wait=new int[numberOfThreads];
-        this.areAllTasksOverArr=new int[numberOfThreads];
+        this.wait = new int[numberOfThreads];
+        this.areAllTasksOverArr = new int[numberOfThreads];
 
         for (int i = 0; i < numberOfThreads; i++) {
-            wait[i]=0;
-            areAllTasksOverArr[i]=0;
+            wait[i] = 0;
+            areAllTasksOverArr[i] = 0;
         }
     }
 
@@ -46,7 +46,7 @@ public class Multi {
         }
 
         long t1 = System.currentTimeMillis();
-        System.out.println("Trajanje programa v ms: " +(t1-t0));
+        System.out.println("Trajanje programa v ms: " + (t1 - t0));
     }
 }
 

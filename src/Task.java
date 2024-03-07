@@ -7,26 +7,27 @@ class Task implements Runnable {
     private int endRow;
     private int rows, cols;
     CyclicBarrier cyclicBarrier;
-    public Task(Multi multi,int taskId, CyclicBarrier cyclicBarrier ) {
+
+    public Task(Multi multi, int taskId, CyclicBarrier cyclicBarrier) {
         this.multi = multi;
         this.taskId = taskId;
-        this.startRow = taskId*(multi.matrikaCelic.row) / (multi.numberOfThreads);
-        this.endRow = Math.min((taskId + 1) * (multi.matrikaCelic.row) / (multi.numberOfThreads),multi.matrikaCelic.row);
+        this.startRow = taskId * (multi.matrikaCelic.row) / (multi.numberOfThreads);
+        this.endRow = Math.min((taskId + 1) * (multi.matrikaCelic.row) / (multi.numberOfThreads), multi.matrikaCelic.row);
         this.rows = multi.matrikaCelic.row;
         this.cols = multi.matrikaCelic.col;
         this.cyclicBarrier = cyclicBarrier;
     }
 
-    public boolean lock(int [] array){
+    public boolean lock(int[] array) {
         for (int i = 0; i < array.length; i++) {
-            if(array[i]==0){
+            if (array[i] == 0) {
                 return false;
             }
         }
         return true;
     }
 
-    public float maxTempChanfe(){
+    public float maxTempChanfe() {
         float maxTempChange = 0;
         float change = 0;
         for (int i = startRow; i < endRow; i++) {
@@ -46,9 +47,9 @@ class Task implements Runnable {
         float maxTempChange = maxTempChanfe();
         //System.out.println(" temperaturna sprememba " +maxTempChange+" Threda "+taskId);
         if (maxTempChange >= 0.25) {
-            multi.areAllTasksOverArr[taskId]=0;
+            multi.areAllTasksOverArr[taskId] = 0;
         } else {
-            multi.areAllTasksOverArr[taskId]=1;
+            multi.areAllTasksOverArr[taskId] = 1;
         }
     }
 
@@ -70,8 +71,8 @@ class Task implements Runnable {
     @Override
     public void run() {
 
-        System.out.println("Task " + taskId + " is being processed by thread " + Thread.currentThread().getName()+
-                " My startRow "+startRow+" My endRow "+endRow);
+        System.out.println("Task " + taskId + " is being processed by thread " + Thread.currentThread().getName() +
+                " My startRow " + startRow + " My endRow " + endRow);
         do {
             //calPrevTemp
             for (int k = startRow; k < endRow; k++) {
@@ -114,16 +115,14 @@ class Task implements Runnable {
             //System.out.println();
 
 
-                System.out.println(
-                        " Nit  "+taskId+" tocka "+2+" ima temperaturo "+multi.matrikaCelic.getMatrikaCelic()[5][2].getNowTemp());
-                try {
-                    cyclicBarrier.await();
-                } catch (InterruptedException | BrokenBarrierException e) {
-                    Thread.currentThread().interrupt();
-                    System.err.println("Thread interrupted or barrier broken");
-                }
-
-
+            System.out.println(
+                    " Nit  " + taskId + " tocka " + 2 + " ima temperaturo " + multi.matrikaCelic.getMatrikaCelic()[5][2].getNowTemp());
+            try {
+                cyclicBarrier.await();
+            } catch (InterruptedException | BrokenBarrierException e) {
+                Thread.currentThread().interrupt();
+                System.err.println("Thread interrupted or barrier broken");
+            }
 
 
             System.out.println();

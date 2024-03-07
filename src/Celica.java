@@ -2,11 +2,10 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class Celica  {
+public class Celica {
     private float preTemp;
     private float nowTemp;
     public Boolean isHeatSource;
-
 
 
     public Celica(float preTemp, float nowTemp, Boolean isHeatSource) {
@@ -44,10 +43,7 @@ public class Celica  {
     }
 
 
-
-
-
-    }
+}
 
 
 

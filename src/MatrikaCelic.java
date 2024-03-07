@@ -14,7 +14,7 @@ public class MatrikaCelic {
         this.row = row;
         this.col = col;
         this.numOfHeat = numOfHeat;
-        this.time = time*1000;
+        this.time = time * 1000;
         this.heatSources = new int[numOfHeat][2];
         this.matrikaCelic = narediMatriko();
 
@@ -32,7 +32,7 @@ public class MatrikaCelic {
         return matrikaCelic;
     }
 
-    public Celica getCelica (int i, int j){
+    public Celica getCelica(int i, int j) {
         return matrikaCelic[i][j];
     }
 
@@ -62,14 +62,14 @@ public class MatrikaCelic {
     }
 
     public boolean setFallsHeatsources(long timestamp) {
-        if ((System.currentTimeMillis()-timestamp) >= time) {
+        if ((System.currentTimeMillis() - timestamp) >= time) {
 
-        for (int i = 0; i < numOfHeat; i++) {
-            this.matrikaCelic[heatSources[i][0]][heatSources[i][1]].setHeatSource(false);
+            for (int i = 0; i < numOfHeat; i++) {
+                this.matrikaCelic[heatSources[i][0]][heatSources[i][1]].setHeatSource(false);
 
-        }
+            }
             return true;
-    }
+        }
         return false;
     }
 
@@ -140,11 +140,11 @@ public class MatrikaCelic {
         }
     }
 
-    public float tempChange(int i, int j){
-        return Math.abs(matrikaCelic[i][j].getNowTemp()-matrikaCelic[i][j].getPreTemp());
+    public float tempChange(int i, int j) {
+        return Math.abs(matrikaCelic[i][j].getNowTemp() - matrikaCelic[i][j].getPreTemp());
     }
 
-    public float [] matrikaToArrayPrevTemp(){
+    public float[] matrikaToArrayPrevTemp() {
         float[] arrayPrevTemp = new float[row * col];
 
         for (int i = 0; i < row; i++) {
@@ -155,7 +155,8 @@ public class MatrikaCelic {
 
         return arrayPrevTemp;
     }
-    public float [] matrikaToArrayNowTemp(){
+
+    public float[] matrikaToArrayNowTemp() {
         float[] arrayNowTemp = new float[row * col];
 
         for (int i = 0; i < row; i++) {
@@ -167,8 +168,8 @@ public class MatrikaCelic {
         return arrayNowTemp;
     }
 
-    public boolean [] matrikaToArrayIsHeatSource(){
-        boolean[] arrayIsHeatSourc = new boolean [row * col];
+    public boolean[] matrikaToArrayIsHeatSource() {
+        boolean[] arrayIsHeatSourc = new boolean[row * col];
 
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
@@ -179,7 +180,7 @@ public class MatrikaCelic {
         return arrayIsHeatSourc;
     }
 
-    public void arraysToMatrika(float[] arrayNowTemp, float[] arrayPrevTemp){
+    public void arraysToMatrika(float[] arrayNowTemp, float[] arrayPrevTemp) {
 
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
@@ -190,17 +191,17 @@ public class MatrikaCelic {
 
     }
 
-    public static Celica[][] matrikaToMejneVrednosti(Celica[][] matrikaCelic, int rows, int cols, int size){
-        int rowsPerProcess = rows/size;
-        int stMejnihRows = (size*2)-2;
+    public static Celica[][] matrikaToMejneVrednosti(Celica[][] matrikaCelic, int rows, int cols, int size) {
+        int rowsPerProcess = rows / size;
+        int stMejnihRows = (size * 2) - 2;
 
-        int startRow =0;
+        int startRow = 0;
         int endRow = startRow + rowsPerProcess - 1;
 
         Celica[][] mejneVrednosti = new Celica[stMejnihRows][cols];
 
-        mejneVrednosti[0]=matrikaCelic[endRow];
-        startRow = startRow+ rowsPerProcess;
+        mejneVrednosti[0] = matrikaCelic[endRow];
+        startRow = startRow + rowsPerProcess;
         endRow = endRow + rowsPerProcess;
 
         for (int i = 1; i < stMejnihRows - 1; i += 2) {
@@ -210,7 +211,7 @@ public class MatrikaCelic {
             endRow += rowsPerProcess;
         }
 
-        mejneVrednosti[stMejnihRows-1]=matrikaCelic[startRow];
+        mejneVrednosti[stMejnihRows - 1] = matrikaCelic[startRow];
 
         return mejneVrednosti;
     }

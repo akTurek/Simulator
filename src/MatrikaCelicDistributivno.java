@@ -1,12 +1,12 @@
 public class MatrikaCelicDistributivno {
 
-    float [] arrayPrevTemp;
-    float [] arrayNowTemp;
-    boolean [] arrayIsHeatSourc;
-    float [] lowLimitPrevTemp;
-    float [] upLimitPrevTemp;
-    float [] lowLimitNowTemp;
-    float [] upLimitNowTemp;
+    float[] arrayPrevTemp;
+    float[] arrayNowTemp;
+    boolean[] arrayIsHeatSourc;
+    float[] lowLimitPrevTemp;
+    float[] upLimitPrevTemp;
+    float[] lowLimitNowTemp;
+    float[] upLimitNowTemp;
     int arraySize;
     int cols;
     int rank;
@@ -21,8 +21,8 @@ public class MatrikaCelicDistributivno {
         this.arrayIsHeatSourc = new boolean[arraySize];
 
         this.cols = cols;
-        this.startIndexOfLastRow= arraySize-cols;
-        this.endIndexOfLastRow= arraySize-1;
+        this.startIndexOfLastRow = arraySize - cols;
+        this.endIndexOfLastRow = arraySize - 1;
         this.arraySize = arraySize;
         this.lowLimitPrevTemp = new float[cols];
         this.upLimitPrevTemp = new float[cols];
@@ -37,7 +37,7 @@ public class MatrikaCelicDistributivno {
         this.arrayNowTemp = arrayNowTemp;
     }
 
-    public void setLimits(float[] lowLimitPrevTemp, float[] upLimitPrevTemp,float[] lowLimitNowTemp, float[] upLimitNowTemp) {
+    public void setLimits(float[] lowLimitPrevTemp, float[] upLimitPrevTemp, float[] lowLimitNowTemp, float[] upLimitNowTemp) {
         this.lowLimitPrevTemp = lowLimitPrevTemp;
         this.upLimitPrevTemp = upLimitPrevTemp;
         this.lowLimitNowTemp = lowLimitNowTemp;
@@ -62,11 +62,11 @@ public class MatrikaCelicDistributivno {
                 } else if (i == cols - 1) {
                     arrayNowTemp[i] = (lowLimitPrevTemp[i] + arrayPrevTemp[i - 1] + arrayPrevTemp[i + cols]) / 3;
                 } else if (i == startIndexOfLastRow) {
-                    arrayNowTemp[i] = (upLimitPrevTemp[i%cols] + arrayPrevTemp[i + 1] + arrayPrevTemp[i - cols]) / 3;
+                    arrayNowTemp[i] = (upLimitPrevTemp[i % cols] + arrayPrevTemp[i + 1] + arrayPrevTemp[i - cols]) / 3;
                 } else if (i == endIndexOfLastRow) {
-                    arrayNowTemp[i] = (upLimitPrevTemp[i%cols] + arrayPrevTemp[i - 1] + arrayPrevTemp[i - cols]) / 3;
+                    arrayNowTemp[i] = (upLimitPrevTemp[i % cols] + arrayPrevTemp[i - 1] + arrayPrevTemp[i - cols]) / 3;
                 } else if (i > startIndexOfLastRow) {
-                    arrayNowTemp[i] = (upLimitPrevTemp[i%cols] + arrayPrevTemp[i + 1] + arrayPrevTemp[i - 1] + arrayPrevTemp[i - cols]) / 4;
+                    arrayNowTemp[i] = (upLimitPrevTemp[i % cols] + arrayPrevTemp[i + 1] + arrayPrevTemp[i - 1] + arrayPrevTemp[i - cols]) / 4;
                 } else {
                     arrayNowTemp[i] = (arrayPrevTemp[i + cols] + arrayPrevTemp[i + 1] + arrayPrevTemp[i - 1] + arrayPrevTemp[i - cols]) / 4;
                 }
@@ -77,21 +77,21 @@ public class MatrikaCelicDistributivno {
     public void calPrevTempMidlle() {
         for (int i = 0; i < arraySize; i++) {
             if (!arrayIsHeatSourc[i]) {
-            if (i ==0) {
-                arrayPrevTemp[i] =(lowLimitNowTemp[i]+arrayNowTemp[i+1]+arrayNowTemp[i+cols])/3;
-            } else if (i < cols-1) {
-                arrayPrevTemp[i] =(lowLimitNowTemp[i]+arrayNowTemp[i+1]+arrayNowTemp[i-1]+arrayNowTemp[i+cols])/4;
-            } else if (i == cols-1) {
-                arrayPrevTemp[i] =(lowLimitNowTemp[i]+arrayNowTemp[i-1]+arrayNowTemp[i+cols])/3;
-            } else if (i==startIndexOfLastRow) {
-                arrayPrevTemp[i] =(upLimitNowTemp[i%cols]+arrayNowTemp[i+1]+arrayNowTemp[i-cols])/3;
-            } else if (i == endIndexOfLastRow) {
-                arrayPrevTemp[i] =(upLimitNowTemp[i%cols]+arrayNowTemp[i-1]+arrayNowTemp[i-cols])/3;
-            } else if (i>startIndexOfLastRow) {
-                arrayPrevTemp[i] =(upLimitNowTemp[i%cols]+arrayNowTemp[i+1]+arrayNowTemp[i-1]+arrayNowTemp[i-cols])/4;
-            }else {
-                arrayPrevTemp[i] = (arrayNowTemp[i + cols] + arrayNowTemp[i + 1] + arrayNowTemp[i - 1] + arrayNowTemp[i - cols]) / 4;
-            }
+                if (i == 0) {
+                    arrayPrevTemp[i] = (lowLimitNowTemp[i] + arrayNowTemp[i + 1] + arrayNowTemp[i + cols]) / 3;
+                } else if (i < cols - 1) {
+                    arrayPrevTemp[i] = (lowLimitNowTemp[i] + arrayNowTemp[i + 1] + arrayNowTemp[i - 1] + arrayNowTemp[i + cols]) / 4;
+                } else if (i == cols - 1) {
+                    arrayPrevTemp[i] = (lowLimitNowTemp[i] + arrayNowTemp[i - 1] + arrayNowTemp[i + cols]) / 3;
+                } else if (i == startIndexOfLastRow) {
+                    arrayPrevTemp[i] = (upLimitNowTemp[i % cols] + arrayNowTemp[i + 1] + arrayNowTemp[i - cols]) / 3;
+                } else if (i == endIndexOfLastRow) {
+                    arrayPrevTemp[i] = (upLimitNowTemp[i % cols] + arrayNowTemp[i - 1] + arrayNowTemp[i - cols]) / 3;
+                } else if (i > startIndexOfLastRow) {
+                    arrayPrevTemp[i] = (upLimitNowTemp[i % cols] + arrayNowTemp[i + 1] + arrayNowTemp[i - 1] + arrayNowTemp[i - cols]) / 4;
+                } else {
+                    arrayPrevTemp[i] = (arrayNowTemp[i + cols] + arrayNowTemp[i + 1] + arrayNowTemp[i - 1] + arrayNowTemp[i - cols]) / 4;
+                }
             }
         }
     }
@@ -106,11 +106,11 @@ public class MatrikaCelicDistributivno {
                 } else if (i == cols - 1) {
                     arrayNowTemp[i] = (arrayPrevTemp[i - 1] + arrayPrevTemp[i + cols]) / 2;
                 } else if (i == startIndexOfLastRow) {
-                    arrayNowTemp[i] = (upLimitPrevTemp[i%cols] + arrayPrevTemp[i + 1] + arrayPrevTemp[i - cols]) / 3;
+                    arrayNowTemp[i] = (upLimitPrevTemp[i % cols] + arrayPrevTemp[i + 1] + arrayPrevTemp[i - cols]) / 3;
                 } else if (i == endIndexOfLastRow) {
-                    arrayNowTemp[i] = (upLimitPrevTemp[i%cols] + arrayPrevTemp[i - 1] + arrayPrevTemp[i - cols]) / 3;
+                    arrayNowTemp[i] = (upLimitPrevTemp[i % cols] + arrayPrevTemp[i - 1] + arrayPrevTemp[i - cols]) / 3;
                 } else if (i > startIndexOfLastRow) {
-                    arrayNowTemp[i] = (upLimitPrevTemp[i%cols] + arrayPrevTemp[i + 1] + arrayPrevTemp[i - 1] + arrayPrevTemp[i - cols]) / 4;
+                    arrayNowTemp[i] = (upLimitPrevTemp[i % cols] + arrayPrevTemp[i + 1] + arrayPrevTemp[i - 1] + arrayPrevTemp[i - cols]) / 4;
                 } else {
                     arrayNowTemp[i] = (arrayPrevTemp[i + cols] + arrayPrevTemp[i + 1] + arrayPrevTemp[i - 1] + arrayPrevTemp[i - cols]) / 4;
                 }
@@ -121,19 +121,19 @@ public class MatrikaCelicDistributivno {
     public void calPrevTempFirst() {
         for (int i = 0; i < arraySize; i++) {
             if (!arrayIsHeatSourc[i]) {
-                if (i ==0) {
-                    arrayPrevTemp[i] =(arrayNowTemp[i+1]+arrayNowTemp[i+cols])/2;
-                } else if (i < cols-1) {
-                    arrayPrevTemp[i] =(arrayNowTemp[i+1]+arrayNowTemp[i-1]+arrayNowTemp[i+cols])/3;
-                } else if (i == cols-1) {
-                    arrayPrevTemp[i] =(arrayNowTemp[i-1]+arrayNowTemp[i+cols])/2;
-                } else if (i==startIndexOfLastRow) {
-                    arrayPrevTemp[i] =(upLimitNowTemp[i%cols]+arrayNowTemp[i+1]+arrayNowTemp[i-cols])/3;
+                if (i == 0) {
+                    arrayPrevTemp[i] = (arrayNowTemp[i + 1] + arrayNowTemp[i + cols]) / 2;
+                } else if (i < cols - 1) {
+                    arrayPrevTemp[i] = (arrayNowTemp[i + 1] + arrayNowTemp[i - 1] + arrayNowTemp[i + cols]) / 3;
+                } else if (i == cols - 1) {
+                    arrayPrevTemp[i] = (arrayNowTemp[i - 1] + arrayNowTemp[i + cols]) / 2;
+                } else if (i == startIndexOfLastRow) {
+                    arrayPrevTemp[i] = (upLimitNowTemp[i % cols] + arrayNowTemp[i + 1] + arrayNowTemp[i - cols]) / 3;
                 } else if (i == endIndexOfLastRow) {
-                    arrayPrevTemp[i] =(upLimitNowTemp[i%cols]+arrayNowTemp[i-1]+arrayNowTemp[i-cols])/3;
-                } else if (i>startIndexOfLastRow) {
-                    arrayPrevTemp[i] =(upLimitNowTemp[i%cols]+arrayNowTemp[i+1]+arrayNowTemp[i-1]+arrayNowTemp[i-cols])/4;
-                }else {
+                    arrayPrevTemp[i] = (upLimitNowTemp[i % cols] + arrayNowTemp[i - 1] + arrayNowTemp[i - cols]) / 3;
+                } else if (i > startIndexOfLastRow) {
+                    arrayPrevTemp[i] = (upLimitNowTemp[i % cols] + arrayNowTemp[i + 1] + arrayNowTemp[i - 1] + arrayNowTemp[i - cols]) / 4;
+                } else {
                     arrayPrevTemp[i] = (arrayNowTemp[i + cols] + arrayNowTemp[i + 1] + arrayNowTemp[i - 1] + arrayNowTemp[i - cols]) / 4;
                 }
             }
@@ -158,6 +158,7 @@ public class MatrikaCelicDistributivno {
                 } else {
                     arrayNowTemp[i] = (arrayPrevTemp[i + cols] + arrayPrevTemp[i + 1] + arrayPrevTemp[i - 1] + arrayPrevTemp[i - cols]) / 4;
                 }
+                //System.out.println("Now temp last " +arrayPrevTemp[i]);
             }
         }
     }
@@ -165,56 +166,57 @@ public class MatrikaCelicDistributivno {
     public void calPrevTempLast() {
         for (int i = 0; i < arraySize; i++) {
             if (!arrayIsHeatSourc[i]) {
-                if (i ==0) {
-                    arrayPrevTemp[i] =(lowLimitNowTemp[i]+arrayNowTemp[i+1]+arrayNowTemp[i+cols])/3;
-                } else if (i < cols-1) {
-                    arrayPrevTemp[i] =(lowLimitNowTemp[i]+arrayNowTemp[i+1]+arrayNowTemp[i-1]+arrayNowTemp[i+cols])/4;
-                } else if (i == cols-1) {
-                    arrayPrevTemp[i] =(lowLimitNowTemp[i]+arrayNowTemp[i-1]+arrayNowTemp[i+cols])/3;
-                } else if (i==startIndexOfLastRow) {
-                    arrayPrevTemp[i] =(arrayNowTemp[i+1]+arrayNowTemp[i-cols])/2;
+                if (i == 0) {
+                    arrayPrevTemp[i] = (lowLimitNowTemp[i] + arrayNowTemp[i + 1] + arrayNowTemp[i + cols]) / 3;
+                } else if (i < cols - 1) {
+                    arrayPrevTemp[i] = (lowLimitNowTemp[i] + arrayNowTemp[i + 1] + arrayNowTemp[i - 1] + arrayNowTemp[i + cols]) / 4;
+                } else if (i == cols - 1) {
+                    arrayPrevTemp[i] = (lowLimitNowTemp[i] + arrayNowTemp[i - 1] + arrayNowTemp[i + cols]) / 3;
+                } else if (i == startIndexOfLastRow) {
+                    arrayPrevTemp[i] = (arrayNowTemp[i + 1] + arrayNowTemp[i - cols]) / 2;
                 } else if (i == endIndexOfLastRow) {
-                    arrayPrevTemp[i] =(arrayNowTemp[i-1]+arrayNowTemp[i-cols])/2;
-                } else if (i>startIndexOfLastRow) {
-                    arrayPrevTemp[i] =(arrayNowTemp[i+1]+arrayNowTemp[i-1]+arrayNowTemp[i-cols])/3;
-                }else {
+                    arrayPrevTemp[i] = (arrayNowTemp[i - 1] + arrayNowTemp[i - cols]) / 2;
+                } else if (i > startIndexOfLastRow) {
+                    arrayPrevTemp[i] = (arrayNowTemp[i + 1] + arrayNowTemp[i - 1] + arrayNowTemp[i - cols]) / 3;
+                } else {
                     arrayPrevTemp[i] = (arrayNowTemp[i + cols] + arrayNowTemp[i + 1] + arrayNowTemp[i - 1] + arrayNowTemp[i - cols]) / 4;
                 }
             }
+            //System.out.println("Prev temp last "+arrayPrevTemp[i]);
         }
     }
 
-    public int isOver(){
+    public int isOver() {
         float maxTempChange = 0;
         float tempChange;
         for (int i = 0; i < arraySize; i++) {
-            tempChange = Math.abs(arrayPrevTemp[i]-arrayNowTemp[i]);
-            if (tempChange > maxTempChange){
+            tempChange = Math.abs(arrayPrevTemp[i] - arrayNowTemp[i]);
+            if (tempChange > maxTempChange) {
                 maxTempChange = tempChange;
             }
         }
 
-        if (maxTempChange <= 0.25){
+        if (maxTempChange <= 0.25) {
             return 1;
-        }else {
+        } else {
             return 0;
         }
 
     }
 
-    public int enCikelSumulacijeMiddle(){
+    public int enCikelSumulacijeMiddle() {
         calPrevTempMidlle();
         calNowTempMiddle();
         return isOver();
     }
 
-    public int enCikelSumulacijeFirst(){
+    public int enCikelSumulacijeFirst() {
         calPrevTempFirst();
         calNowTempFirst();
         return isOver();
     }
 
-    public int enCikelSumulacijeLast(){
+    public int enCikelSumulacijeLast() {
         calPrevTempLast();
         calNowTempLast();
         return isOver();
