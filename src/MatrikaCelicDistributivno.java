@@ -55,7 +55,15 @@ public class MatrikaCelicDistributivno {
     public void calNowTempMiddle() {
         for (int i = 0; i < arraySize; i++) {
             if (!arrayIsHeatSourc[i]) {
-                if (i == 0) {
+                if (startIndexOfLastRow == 0) {
+                    if (i == startIndexOfLastRow) {
+                        arrayNowTemp[i] = (lowLimitPrevTemp[i] + arrayPrevTemp[i + 1] + upLimitNowTemp[i]) / 3;
+                    } else if (i == endIndexOfLastRow) {
+                        arrayNowTemp[i] = (lowLimitPrevTemp[i] + arrayPrevTemp[i - 1] + upLimitNowTemp[i]) / 3;
+                    } else {
+                        arrayNowTemp[i] = (lowLimitPrevTemp[i] + arrayPrevTemp[i + 1] + arrayPrevTemp[i - 1] + upLimitPrevTemp[i]) / 4;
+                    }
+                } else if (i == 0) {
                     arrayNowTemp[i] = (lowLimitPrevTemp[i] + arrayPrevTemp[i + 1] + arrayPrevTemp[i + cols]) / 3;
                 } else if (i < cols - 1) {
                     arrayNowTemp[i] = (lowLimitPrevTemp[i] + arrayPrevTemp[i + 1] + arrayPrevTemp[i - 1] + arrayPrevTemp[i + cols]) / 4;
@@ -77,7 +85,15 @@ public class MatrikaCelicDistributivno {
     public void calPrevTempMidlle() {
         for (int i = 0; i < arraySize; i++) {
             if (!arrayIsHeatSourc[i]) {
-                if (i == 0) {
+                if (startIndexOfLastRow == 0) {
+                    if (i == startIndexOfLastRow) {
+                        arrayPrevTemp[i] = (lowLimitNowTemp[i] + arrayNowTemp[i + 1] + upLimitNowTemp[i]) / 3;
+                    } else if (i == endIndexOfLastRow) {
+                        arrayPrevTemp[i] = (lowLimitNowTemp[i] + arrayNowTemp[i - 1] + upLimitNowTemp[i]) / 3;
+                    } else {
+                        arrayPrevTemp[i] = (lowLimitNowTemp[i] + arrayNowTemp[i + 1] + arrayNowTemp[i - 1] + upLimitNowTemp[i]) / 4;
+                    }
+                } else if (i == 0) {
                     arrayPrevTemp[i] = (lowLimitNowTemp[i] + arrayNowTemp[i + 1] + arrayNowTemp[i + cols]) / 3;
                 } else if (i < cols - 1) {
                     arrayPrevTemp[i] = (lowLimitNowTemp[i] + arrayNowTemp[i + 1] + arrayNowTemp[i - 1] + arrayNowTemp[i + cols]) / 4;
@@ -99,7 +115,15 @@ public class MatrikaCelicDistributivno {
     public void calNowTempFirst() {
         for (int i = 0; i < arraySize; i++) {
             if (!arrayIsHeatSourc[i]) {
-                if (i == 0) {
+                if (startIndexOfLastRow == 0) {
+                    if (i == startIndexOfLastRow) {
+                        arrayNowTemp[i] = (arrayPrevTemp[i + 1] + upLimitNowTemp[i]) / 2;
+                    } else if (i == endIndexOfLastRow) {
+                        arrayNowTemp[i] = (arrayPrevTemp[i - 1] + upLimitNowTemp[i]) / 2;
+                    } else {
+                        arrayNowTemp[i] = (arrayPrevTemp[i + 1] + arrayPrevTemp[i - 1] + upLimitPrevTemp[i]) / 3;
+                    }
+                } else if (i == 0) {
                     arrayNowTemp[i] = (arrayPrevTemp[i + 1] + arrayPrevTemp[i + cols]) / 2;
                 } else if (i < cols - 1) {
                     arrayNowTemp[i] = (arrayPrevTemp[i + 1] + arrayPrevTemp[i - 1] + arrayPrevTemp[i + cols]) / 3;
@@ -121,7 +145,15 @@ public class MatrikaCelicDistributivno {
     public void calPrevTempFirst() {
         for (int i = 0; i < arraySize; i++) {
             if (!arrayIsHeatSourc[i]) {
-                if (i == 0) {
+                if (startIndexOfLastRow == 0) {
+                    if (i == startIndexOfLastRow) {
+                        arrayPrevTemp[i] = (arrayNowTemp[i + 1] + upLimitNowTemp[i]) / 2;
+                    } else if (i == endIndexOfLastRow) {
+                        arrayPrevTemp[i] = (arrayNowTemp[i - 1] + upLimitNowTemp[i]) / 2;
+                    } else {
+                        arrayPrevTemp[i] = (arrayNowTemp[i + 1] + arrayNowTemp[i - 1] + upLimitNowTemp[i]) / 3;
+                    }
+                } else if (i == 0) {
                     arrayPrevTemp[i] = (arrayNowTemp[i + 1] + arrayNowTemp[i + cols]) / 2;
                 } else if (i < cols - 1) {
                     arrayPrevTemp[i] = (arrayNowTemp[i + 1] + arrayNowTemp[i - 1] + arrayNowTemp[i + cols]) / 3;
@@ -143,7 +175,15 @@ public class MatrikaCelicDistributivno {
     public void calNowTempLast() {
         for (int i = 0; i < arraySize; i++) {
             if (!arrayIsHeatSourc[i]) {
-                if (i == 0) {
+                if (startIndexOfLastRow == 0) {
+                    if (i == startIndexOfLastRow) {
+                        arrayNowTemp[i] = (arrayPrevTemp[i + 1] + lowLimitPrevTemp[i]) / 2;
+                    } else if (i == endIndexOfLastRow) {
+                        arrayNowTemp[i] = (arrayPrevTemp[i - 1] + lowLimitPrevTemp[i]) / 2;
+                    } else {
+                        arrayNowTemp[i] = (arrayPrevTemp[i + 1] + arrayPrevTemp[i - 1] + lowLimitPrevTemp[i]) / 3;
+                    }
+                } else if (i == 0) {
                     arrayNowTemp[i] = (lowLimitPrevTemp[i] + arrayPrevTemp[i + 1] + arrayPrevTemp[i + cols]) / 3;
                 } else if (i < cols - 1) {
                     arrayNowTemp[i] = (lowLimitPrevTemp[i] + arrayPrevTemp[i + 1] + arrayPrevTemp[i - 1] + arrayPrevTemp[i + cols]) / 4;
@@ -166,7 +206,15 @@ public class MatrikaCelicDistributivno {
     public void calPrevTempLast() {
         for (int i = 0; i < arraySize; i++) {
             if (!arrayIsHeatSourc[i]) {
-                if (i == 0) {
+                if (startIndexOfLastRow == 0) {
+                    if (i == startIndexOfLastRow) {
+                        arrayPrevTemp[i] = (arrayNowTemp[i + 1] + lowLimitNowTemp[i]) / 2;
+                    } else if (i == endIndexOfLastRow) {
+                        arrayPrevTemp[i] = (arrayNowTemp[i - 1] + lowLimitNowTemp[i]) / 2;
+                    } else {
+                        arrayPrevTemp[i] = (arrayNowTemp[i + 1] + arrayNowTemp[i - 1] + lowLimitNowTemp[i]) / 3;
+                    }
+                } else if (i == 0) {
                     arrayPrevTemp[i] = (lowLimitNowTemp[i] + arrayNowTemp[i + 1] + arrayNowTemp[i + cols]) / 3;
                 } else if (i < cols - 1) {
                     arrayPrevTemp[i] = (lowLimitNowTemp[i] + arrayNowTemp[i + 1] + arrayNowTemp[i - 1] + arrayNowTemp[i + cols]) / 4;

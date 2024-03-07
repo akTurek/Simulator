@@ -10,8 +10,8 @@ public class Distributivno {
         int size = MPI.COMM_WORLD.Size();
 
 
-        int rows = 100; // Number of rows
-        int cols = 100; // Number of columns
+        int rows = 10; // Number of rows
+        int cols = 10; // Number of columns
         int heatSources = 10; // Number of columns
 
         long t0 = System.currentTimeMillis();
