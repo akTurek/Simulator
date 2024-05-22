@@ -2,8 +2,8 @@ public class Sekvencno {
     public MatrikaCelic matrikaCelic;
 
 
-    public Sekvencno(int row, int col, int numOfHeat, int time){
-        this.matrikaCelic = new MatrikaCelic(row, col, numOfHeat, time);
+    public Sekvencno(int row, int col, int numOfHeat){
+        this.matrikaCelic = new MatrikaCelic(row, col, numOfHeat);
     }
 
     public MatrikaCelic getMatrikaCelic() {
@@ -17,19 +17,20 @@ public class Sekvencno {
         do{
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < cols; j++) {
-                   matrikaCelic.calPrevTemp(i,j, rows, cols);
+                   matrikaCelic.calPrevTemp(i,j);
                 }
             }
 
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < cols; j++) {
-                    matrikaCelic.calNowTemp(i,j, rows, cols);
+                    matrikaCelic.calNowTemp(i,j);
                 }
             }
 
         }while (!isOver(rows, cols));
         long t1 = System.currentTimeMillis();
-        System.out.println("Trajanje programa v ms: " +(t1-t0)+ " max temp change "+maxTempChanfe(rows, cols));
+        System.out.println("Trajanje programa v ms: " +(t1-t0)+ " max temp change "+maxTempChange(rows, cols));
+        matrikaCelic.printMatriko();
     }
     public boolean isOver(int rows, int cols){
         float maxTempChange = 0;
@@ -50,7 +51,7 @@ public class Sekvencno {
         }
     }
 
-    public float maxTempChanfe(int rows, int cols){
+    public float maxTempChange(int rows, int cols){
         float maxTempChange = 0;
         float change = 0;
         for (int i = 0; i < rows; i++) {

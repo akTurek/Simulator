@@ -27,7 +27,7 @@ class Task implements Runnable {
         return true;
     }
 
-    public float maxTempChanfe() {
+    public float maxTempChange() {
         float maxTempChange = 0;
         float change = 0;
         for (int i = startRow; i < endRow; i++) {
@@ -44,7 +44,7 @@ class Task implements Runnable {
     }
 
     public void isOver() {
-        float maxTempChange = maxTempChanfe();
+        float maxTempChange = maxTempChange();
         //System.out.println(" temperaturna sprememba " +maxTempChange+" Threda "+taskId);
         if (maxTempChange >= 0.25) {
             multi.areAllTasksOverArr[taskId] = 0;
@@ -77,7 +77,7 @@ class Task implements Runnable {
             //calPrevTemp
             for (int k = startRow; k < endRow; k++) {
                 for (int j = 0; j < multi.matrikaCelic.col; j++) {
-                    multi.matrikaCelic.calPrevTemp(k, j, rows, cols);
+                    multi.matrikaCelic.calPrevTemp(k, j);
                 }
             }
 
@@ -92,7 +92,7 @@ class Task implements Runnable {
             //calNowTemp
             for (int i = startRow; i < endRow; i++) {
                 for (int j = 0; j < cols; j++) {
-                    multi.matrikaCelic.calNowTemp(i, j, rows, cols);
+                    multi.matrikaCelic.calNowTemp(i, j);
                 }
             }
             //Barrier

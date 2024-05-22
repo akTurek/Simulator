@@ -10,8 +10,8 @@ public class Distributivno {
         int size = MPI.COMM_WORLD.Size();
 
 
-        int rows = 10; // Number of rows
-        int cols = 10; // Number of columns
+        int rows = 40; // Number of rows
+        int cols = 40; // Number of columns
         int heatSources = 10; // Number of columns
 
         long t0 = System.currentTimeMillis();
@@ -64,7 +64,7 @@ public class Distributivno {
         // System.out.println("Rank " + rank + " recvcounts vrednost " + recvcounts[rank]);
 
 
-        MatrikaCelic matrikaCelic = new MatrikaCelic(rows, cols, heatSources, 100);
+        MatrikaCelic matrikaCelic = new MatrikaCelic(rows, cols, heatSources);
         float[] sendArrayNowTemp = matrikaCelic.matrikaToArrayNowTemp();
         float[] sendArrayPrevTemp = matrikaCelic.matrikaToArrayPrevTemp();
         boolean[] sendArrayIsHeatSource = matrikaCelic.matrikaToArrayIsHeatSource();
@@ -108,10 +108,10 @@ public class Distributivno {
                 MPI.COMM_WORLD.Recv(upLimitPrevTemp, 0, cols, MPI.FLOAT, rank + 1, 0);
             }
             MPI.COMM_WORLD.Barrier();
-            // System.out.println("Dolzina mejnih vrednosti " + lowLimitNowTemp.length);
+             System.out.println("Dolzina mejnih vrednosti " + lowLimitNowTemp.length);
 
             MPI.COMM_WORLD.Barrier();
-            /*if (rank == 1){
+            if (rank == 1){
                 for (int i = 0; i < lowLimitNowTemp.length; i++) {
                     System.out.print(lowLimitNowTemp[i]+" ");
 
@@ -131,9 +131,9 @@ public class Distributivno {
 
                 System.out.println();
                 System.out.println();
-            }*/
+            }
 
-            /*if (rank == 1){
+            if (rank == 1){
                 for (int i = 0; i < upLimitNowTemp.length; i++) {
                     System.out.print(upLimitNowTemp[i]+" ");
 
@@ -153,7 +153,7 @@ public class Distributivno {
 
                 System.out.println();
                 System.out.println();
-            }*/
+            }
 
 
             arrDis.setLimits(lowLimitPrevTemp, upLimitPrevTemp, lowLimitNowTemp, upLimitNowTemp);
@@ -171,13 +171,13 @@ public class Distributivno {
                 sendIsOverInt[0] = arrDis.enCikelSumulacijeMiddle();
             }
 
-            // System.out.println("Izracunal en cikel");
+            System.out.println("Izracunal en cikel");
 
 
             MPI.COMM_WORLD.Barrier();
 
             if (rank > 0) {
-                // System.out.println("poslal vrednost is over " + sendIsOverInt[0] + " rank " + rank);
+                 System.out.println("poslal vrednost is over " + sendIsOverInt[0] + " rank " + rank);
                 MPI.COMM_WORLD.Send(sendIsOverInt, 0, 1, MPI.INT, 0, 2); // Send integer
             }
 
@@ -190,7 +190,7 @@ public class Distributivno {
                         isOver = false;
                     }
                 }
-                // System.out.println("preracunal is over "+isOver);
+                 System.out.println("preracunal is over "+isOver);
             }
             MPI.COMM_WORLD.Barrier();
             if (rank == 0) {
@@ -241,6 +241,7 @@ public class Distributivno {
 
             matrikaCelic.arraysToMatrika(sendArrayNowTemp, sendArrayPrevTemp);
             matrikaCelic.printMatriko();
+            matrikaCelic.printMatrikoGraficno();
         }
 
 

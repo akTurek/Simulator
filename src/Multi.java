@@ -7,8 +7,8 @@ public class Multi {
     public int[] areAllTasksOverArr;
 
 
-    public Multi(int row, int col, int numOfHeat, double time, int numberOfThreads) {
-        this.matrikaCelic = new MatrikaCelic(row, col, numOfHeat, time);
+    public Multi(int row, int col, int numOfHeat, int numberOfThreads) {
+        this.matrikaCelic = new MatrikaCelic(row, col, numOfHeat);
         this.numberOfThreads = numberOfThreads;
         this.wait = new int[numberOfThreads];
         this.areAllTasksOverArr = new int[numberOfThreads];
@@ -27,9 +27,9 @@ public class Multi {
 
         ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
 
-        // Submit tasks to the thread pool
+        // Dodaj taske
         for (int i = 0; i < numberOfThreads; i++) {
-            // Each task operates on the same shared object
+            //Nad skupnim objektom brez konflikta, druge lokacijem, ali pa pregrada
             Runnable task = new Task(this, i, cyclicBarrier);
             executorService.submit(task);
         }
@@ -46,6 +46,7 @@ public class Multi {
         }
 
         long t1 = System.currentTimeMillis();
+        matrikaCelic.printMatriko();
         System.out.println("Trajanje programa v ms: " + (t1 - t0));
     }
 }
