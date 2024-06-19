@@ -30,7 +30,7 @@ public class Sekvencno {
         }while (!isOver(rows, cols));
         long t1 = System.currentTimeMillis();
         System.out.println("Trajanje programa v ms: " +(t1-t0)+ " max temp change "+maxTempChange(rows, cols));
-        matrikaCelic.printMatriko();
+        //matrikaCelic.printMatriko();
     }
     public boolean isOver(int rows, int cols){
         float maxTempChange = 0;

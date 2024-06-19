@@ -53,12 +53,6 @@ public class MatrikaCelicDistributivno {
         return arrayNowTemp;
     }
 
-    /* ZA racunanje ce bi prisla 1 vrstica na Racunalnik
-    if (startIndexOfLastRow == 0) {
-                        arrayPrevTemp[i] = (lowLimitNowTemp[i] + arrayNowTemp[i + 1] + arrayNowTemp[i - 1] + upLimitNowTemp[i]) / 4;
-                }
-     */
-
     public void calNowTempMiddle() {
         for (int i = 0; i < arraySize; i++) {
             if (!arrayIsHeatSourc[i]) {
@@ -147,7 +141,7 @@ public class MatrikaCelicDistributivno {
                 maxTempChange = tempChange;
             }
         }
-        System.out.println(maxTempChange);
+        //System.out.println(maxTempChange);
 
         if (maxTempChange <= 0.25) {
             return 1;

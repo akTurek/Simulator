@@ -20,7 +20,7 @@ public class Multi {
     }
 
 
-    public void calTemp() {
+    public long calTemp() {
 
         long t0 = System.currentTimeMillis();
         CyclicBarrier cyclicBarrier = new CyclicBarrier(numberOfThreads);
@@ -34,8 +34,6 @@ public class Multi {
             executorService.submit(task);
         }
 
-        // Shutdown the thread pool after all tasks are completed
-        executorService.shutdown();
 
         executorService.shutdown();
         try {
@@ -46,8 +44,8 @@ public class Multi {
         }
 
         long t1 = System.currentTimeMillis();
-        matrikaCelic.printMatriko();
-        System.out.println("Trajanje programa v ms: " + (t1 - t0));
+        //matrikaCelic.printMatriko();
+        return  (t1 - t0);
     }
 }
 

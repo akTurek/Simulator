@@ -63,7 +63,7 @@ class Task implements Runnable {
                 System.err.println("Thread interrupted");
             }
         }
-        System.out.println("Lock opend");
+        //System.out.println("Lock opend");
         multi.wait[this.taskId] = 0;
         notifyAll();
     }
@@ -71,8 +71,8 @@ class Task implements Runnable {
     @Override
     public void run() {
 
-        System.out.println("Task " + taskId + " is being processed by thread " + Thread.currentThread().getName() +
-                " My startRow " + startRow + " My endRow " + endRow);
+        //System.out.println("Task " + taskId + " is being processed by thread " + Thread.currentThread().getName() +
+                //" My startRow " + startRow + " My endRow " + endRow);
         do {
             //calPrevTemp
             for (int k = startRow; k < endRow; k++) {
@@ -115,8 +115,7 @@ class Task implements Runnable {
             //System.out.println();
 
 
-            System.out.println(
-                    " Nit  " + taskId + " tocka " + 2 + " ima temperaturo " + multi.matrikaCelic.getMatrikaCelic()[5][2].getNowTemp());
+            //System.out.println(" Nit  " + taskId + " tocka " + 2 + " ima temperaturo " + multi.matrikaCelic.getMatrikaCelic()[5][2].getNowTemp());
             try {
                 cyclicBarrier.await();
             } catch (InterruptedException | BrokenBarrierException e) {
@@ -125,7 +124,7 @@ class Task implements Runnable {
             }
 
 
-            System.out.println();
+            //System.out.println();
 
 
         } while (!lock(multi.areAllTasksOverArr));
