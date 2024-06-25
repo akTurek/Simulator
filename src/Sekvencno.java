@@ -11,6 +11,7 @@ public class Sekvencno {
     }
 
     public void calTemp() {
+        int c = 0;
         long t0 = System.currentTimeMillis();
         int rows = matrikaCelic.getRow();
         int cols = matrikaCelic.getCol();
@@ -26,11 +27,13 @@ public class Sekvencno {
                     matrikaCelic.calNowTemp(i,j);
                 }
             }
+            c++;
 
         }while (!isOver(rows, cols));
         long t1 = System.currentTimeMillis();
         System.out.println("Trajanje programa v ms: " +(t1-t0)+ " max temp change "+maxTempChange(rows, cols));
         //matrikaCelic.printMatriko();
+        System.out.println("Stevilo cikljev " + c);
     }
     public boolean isOver(int rows, int cols){
         float maxTempChange = 0;

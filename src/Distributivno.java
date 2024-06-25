@@ -10,12 +10,12 @@ public class Distributivno {
         int size = MPI.COMM_WORLD.Size();
 
 
-        int rows = 1024; // Number of rows
-        int cols = 1024; // Number of columns
+        int rows = 5000; // Number of rows
+        int cols = 5000; // Number of columns
         int heatSources = 1000; // Number of columns
 
         long t0 = System.currentTimeMillis();
-
+        int c = 0;
 
         // Calculate the number of elm per process
         int remainderRows = rows % size;
@@ -179,6 +179,10 @@ public class Distributivno {
             arrayNowTemp = arrDis.getArrayNowTemp();
             arrayPrevTemp = arrDis.getArrayPrevTemp();
 
+            if (rank == 0 ){
+                c++;
+            }
+
         }
 
         
@@ -196,8 +200,8 @@ public class Distributivno {
 
                 //System.out.print(sendArrayNowTemp[i]+" ");
             }
-
-            matrikaCelic.arraysToMatrika(sendArrayNowTemp, sendArrayPrevTemp);
+            System.out.println("Stevilo cikljev "+c);
+            //matrikaCelic.arraysToMatrika(sendArrayNowTemp, sendArrayPrevTemp);
             //matrikaCelic.printMatriko();
             //matrikaCelic.printMatrikoGraficno();
         }
@@ -207,7 +211,7 @@ public class Distributivno {
 
 
         long t1 = System.currentTimeMillis();
-        System.out.println("Trajanje programa v ms: " + (t1 - t0));
+        //System.out.println("Trajanje programa v ms: " + (t1 - t0));
 
 
     }
