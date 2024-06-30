@@ -32,6 +32,22 @@ public class MatrikaCelicDistributivno {
 
     }
 
+    public float[] getMyPartF(float[] celArray, int size) {
+        float [] myPart = new float[size];
+        for (int i = 0; i < size; i++) {
+            myPart[i] = celArray[i];
+        }
+        return myPart;
+    }
+
+    public boolean[] getMyPartB(boolean[] celArray, int size) {
+        boolean [] myPart = new boolean[size];
+        for (int i = 0; i < size; i++) {
+            myPart[i] = celArray[i];
+        }
+        return myPart;
+    }
+
     public void setArrays(float[] arrayPrevTemp, float[] arrayNowTemp, boolean[] arrayIsHeatSourc) {
         this.arrayPrevTemp = arrayPrevTemp;
         this.arrayIsHeatSourc = arrayIsHeatSourc;
@@ -53,7 +69,10 @@ public class MatrikaCelicDistributivno {
         return arrayNowTemp;
     }
 
-    public void calNowTempMiddle() {
+    public int calNowTempMiddle() {
+        float maxChange = 0;
+        float change;
+
         for (int i = 0; i < arraySize; i++) {
             if (!arrayIsHeatSourc[i]) {
                 if (i < cols - 1) {
@@ -63,7 +82,17 @@ public class MatrikaCelicDistributivno {
                 } else {
                     arrayNowTemp[i] = (arrayPrevTemp[i + cols] + arrayPrevTemp[i + 1] + arrayPrevTemp[i - 1] + arrayPrevTemp[i - cols]) / 4;
                 }
+                change = Math.abs(arrayNowTemp[i] - arrayPrevTemp[i]);
+                if (change > maxChange) {
+                    maxChange = change;
+                }
             }
+        }
+
+        if (maxChange <= 0.25) {
+            return 1;
+        } else {
+            return 0;
         }
     }
 
@@ -81,7 +110,9 @@ public class MatrikaCelicDistributivno {
         }
     }
 
-    public void calNowTempFirst() {
+    public int calNowTempFirst() {
+        float maxChange = 0;
+        float change;
         for (int i = 0; i < arraySize; i++) {
             if (!arrayIsHeatSourc[i]) {
                  if (i >= startIndexOfLastRow) {
@@ -89,7 +120,17 @@ public class MatrikaCelicDistributivno {
                 } else {
                     arrayNowTemp[i] = (arrayPrevTemp[i + cols] + arrayPrevTemp[i + 1] + arrayPrevTemp[i - 1] + arrayPrevTemp[i - cols]) / 4;
                 }
+
+                 change = Math.abs(arrayNowTemp[i] - arrayPrevTemp[i]);
+                if (change > maxChange) {
+                    maxChange = change;
+                }
             }
+        }
+        if (maxChange <= 0.25) {
+            return 1;
+        } else {
+            return 0;
         }
     }
 
@@ -105,7 +146,9 @@ public class MatrikaCelicDistributivno {
         }
     }
 
-    public void calNowTempLast() {
+    public int calNowTempLast() {
+        float maxChange = 0;
+        float change;
         for (int i = 0; i < arraySize; i++) {
             if (!arrayIsHeatSourc[i]) {
                if (i < cols - 1) {
@@ -113,8 +156,17 @@ public class MatrikaCelicDistributivno {
                 }else {
                     arrayNowTemp[i] = (arrayPrevTemp[i + cols] + arrayPrevTemp[i + 1] + arrayPrevTemp[i - 1] + arrayPrevTemp[i - cols]) / 4;
                 }
-                //System.out.println("Now temp last " +arrayPrevTemp[i]);
+
+                change = Math.abs(arrayNowTemp[i] - arrayPrevTemp[i]);
+                if (change > maxChange) {
+                    maxChange = change;
+                }
             }
+        }
+        if (maxChange <= 0.25) {
+            return 1;
+        } else {
+            return 0;
         }
     }
 
@@ -132,41 +184,23 @@ public class MatrikaCelicDistributivno {
     }
 
 
-    public int isOver() {
-        float maxTempChange = 0;
-        float tempChange;
-        for (int i = 0; i < arraySize; i++) {
-            tempChange = Math.abs(arrayPrevTemp[i] - arrayNowTemp[i]);
-            if (tempChange > maxTempChange) {
-                maxTempChange = tempChange;
-            }
-        }
-        //System.out.println(maxTempChange);
-
-        if (maxTempChange <= 0.25) {
-            return 1;
-        } else {
-            return 0;
-        }
-
-    }
 
     public int enCikelSumulacijeMiddle() {
         calPrevTempMidlle();
-        calNowTempMiddle();
-        return isOver();
+        int isOver = calNowTempMiddle();
+        return isOver;
     }
 
     public int enCikelSumulacijeFirst() {
         calPrevTempFirst();
-        calNowTempFirst();
-        return isOver();
+        int isOver = calNowTempFirst();
+        return isOver;
     }
 
     public int enCikelSumulacijeLast() {
         calPrevTempLast();
-        calNowTempLast();
-        return isOver();
+        int isOver = calNowTempLast();
+        return isOver;
     }
 
 

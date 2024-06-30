@@ -18,66 +18,22 @@ class Task implements Runnable {
         this.cyclicBarrier = cyclicBarrier;
     }
 
-    public boolean lock(int[] array) {
-        for (int i = 0; i < array.length; i++) {
-            if (array[i] == 0) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public float maxTempChange() {
-        float maxTempChange = 0;
-        float change = 0;
-        for (int i = startRow; i < endRow; i++) {
-            for (int j = 0; j < cols; j++) {
-                change = multi.matrikaCelic.tempChange(i, j);
-                if (change >= maxTempChange) {
-                    maxTempChange = change;
-
-                }
-            }
-        }
-
-        return maxTempChange;
-    }
-
-    public void isOver() {
-        float maxTempChange = maxTempChange();
-        //System.out.println(" temperaturna sprememba " +maxTempChange+" Threda "+taskId);
-        if (maxTempChange >= 0.25) {
-            multi.areAllTasksOverArr[taskId] = 0;
-        } else {
-            multi.areAllTasksOverArr[taskId] = 1;
-        }
-    }
-
-    private synchronized void waitForCondition() {
-        multi.wait[this.taskId] = 1;
-        while (lock(multi.wait)) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                System.err.println("Thread interrupted");
-            }
-        }
-        //System.out.println("Lock opend");
-        multi.wait[this.taskId] = 0;
-        notifyAll();
-    }
 
     @Override
     public void run() {
+        float change;
+        float maxChange;
+        int c = 0;
 
-        //System.out.println("Task " + taskId + " is being processed by thread " + Thread.currentThread().getName() +
-                //" My startRow " + startRow + " My endRow " + endRow);
         do {
+            c++;
+            //System.out.println("racunam "+taskId);
             //calPrevTemp
+
             for (int k = startRow; k < endRow; k++) {
                 for (int j = 0; j < multi.matrikaCelic.col; j++) {
                     multi.matrikaCelic.calPrevTemp(k, j);
+                    //System.out.println("racunam "+taskId);
                 }
             }
 
@@ -89,12 +45,25 @@ class Task implements Runnable {
                 System.err.println("Thread interrupted or barrier broken");
             }
 
+
+            maxChange = 0.F;
+            multi.isOver.set(true);
             //calNowTemp
             for (int i = startRow; i < endRow; i++) {
                 for (int j = 0; j < cols; j++) {
                     multi.matrikaCelic.calNowTemp(i, j);
+                    change = multi.matrikaCelic.getTempChange(i,j);
+                    if (change > maxChange) {
+                        maxChange = change;
+                    }
                 }
             }
+
+            if (maxChange > 0.25){
+                multi.isOver.set(false);
+            }
+
+
             //Barrier
             try {
                 cyclicBarrier.await();
@@ -102,34 +71,9 @@ class Task implements Runnable {
                 Thread.currentThread().interrupt();
                 System.err.println("Thread interrupted or barrier broken");
             }
-            //max sprememba temp <0.25
-            isOver();
-
-            //Barrier
-            try {
-                cyclicBarrier.await();
-            } catch (InterruptedException | BrokenBarrierException e) {
-                Thread.currentThread().interrupt();
-                System.err.println("Thread interrupted or barrier broken");
-            }
-            //System.out.println();
-
-
-            //System.out.println(" Nit  " + taskId + " tocka " + 2 + " ima temperaturo " + multi.matrikaCelic.getMatrikaCelic()[5][2].getNowTemp());
-            try {
-                cyclicBarrier.await();
-            } catch (InterruptedException | BrokenBarrierException e) {
-                Thread.currentThread().interrupt();
-                System.err.println("Thread interrupted or barrier broken");
-            }
-
-
-            //System.out.println();
-
-
-        } while (!lock(multi.areAllTasksOverArr));
-
-
+            //System.out.println("max temp change: " + maxChange+ " is over "+ multi.isOver.get()+" thread "+taskId);
+        } while (!multi.isOver.get());
+        System.out.println("stevilo cikljev "+c);
     }
 
 }

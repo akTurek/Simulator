@@ -1,26 +1,21 @@
+import java.security.PrivateKey;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Multi {
     public MatrikaCelic matrikaCelic;
     public int numberOfThreads;
-    public int[] wait;
-    public int[] areAllTasksOverArr;
+    public AtomicBoolean isOver;
 
 
     public Multi(int row, int col, int numOfHeat, int numberOfThreads) {
         this.matrikaCelic = new MatrikaCelic(row, col, numOfHeat);
         this.numberOfThreads = numberOfThreads;
-        this.wait = new int[numberOfThreads];
-        this.areAllTasksOverArr = new int[numberOfThreads];
-
-        for (int i = 0; i < numberOfThreads; i++) {
-            wait[i] = 0;
-            areAllTasksOverArr[i] = 0;
-        }
+        this.isOver = new AtomicBoolean(false);
     }
 
 
-    public long calTemp() {
+    public void calTemp() {
 
         long t0 = System.currentTimeMillis();
         CyclicBarrier cyclicBarrier = new CyclicBarrier(numberOfThreads);
@@ -45,7 +40,7 @@ public class Multi {
 
         long t1 = System.currentTimeMillis();
         //matrikaCelic.printMatriko();
-        return  (t1 - t0);
+        System.out.println("Trajanje programa v ms: " +(t1-t0));
     }
 }
 
