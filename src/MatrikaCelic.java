@@ -3,6 +3,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Random;
 import java.awt.image.BufferedImage;
 
@@ -192,35 +193,34 @@ public class MatrikaCelic {
     }
 
     public void arraysNTToMatrika(float[] arrayNowTemp) {
-        BufferedImage bufferedImage = new BufferedImage(col, row, BufferedImage.TYPE_INT_ARGB);
-
-        Color[] barva = makeColorArray();
 
 
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
                 float tempTemp = (arrayNowTemp[i * col + j]);
                 nowTemp[i][j] =tempTemp ;
-                bufferedImage.setRGB(i, j, barva[(int) tempTemp].getRGB());
+            }
+        }
+    }
+
+
+    public void matrikaJPG(String ime) {
+        BufferedImage bufferedImage = new BufferedImage(col, row, BufferedImage.TYPE_INT_ARGB);
+        Color[] barva = makeColorArray();
+
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                bufferedImage.setRGB(i, j, barva[(int) nowTemp[i][j]].getRGB());
             }
         }
 
-        File outputfile = new File("slika.png");
+        String path = "Rezultati//" + ime + ".png";;
+        File outputfile = new File(path);
         try {
             ImageIO.write(bufferedImage, "png", outputfile);
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-
-    public void arraysPTToMatrika(float[] arrayPrevTemp) {
-        for (int i = 0; i < row; i++) {
-            for (int j = 0; j < col; j++) {
-                prevTemp[i][j] = (arrayPrevTemp[i * col + j]);
-            }
-        }
-
     }
 
     public Color[] makeColorArray(){

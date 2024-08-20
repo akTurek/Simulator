@@ -36,6 +36,7 @@ public class Sekvencno {
         }while (maxChange > 0.25);
         long t1 = System.currentTimeMillis();
         System.out.println("Trajanje programa v ms: " +(t1-t0)+ " max temp change "+maxChange+" cikljev " + c);
+        matrikaCelic.matrikaJPG("sek");
     }
 
 

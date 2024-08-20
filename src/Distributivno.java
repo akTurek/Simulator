@@ -12,7 +12,7 @@ public class Distributivno {
         
         int rows = 100; // Number of rows
         int cols = 100; // Number of columns
-        int heatSources = 10; // Number of columns
+        int heatSources = 100; // Number of columns
 
         long t0 = System.currentTimeMillis();
         int c = 0;
@@ -181,7 +181,7 @@ public class Distributivno {
                 MPI.COMM_WORLD.Recv(temp, displs[i], recvcounts[i], MPI.FLOAT, i, 0);
             }
             matrikaCelic.arraysNTToMatrika(temp);
-            //matrikaCelic.printMatriko();
+            matrikaCelic.matrikaJPG("dist");
 
 
         }

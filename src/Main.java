@@ -3,10 +3,10 @@ public class Main {
 
     public static void main(String[] args) {
 
+        Sekvencno sekvencno = new Sekvencno(100,100,100);
+        sekvencno.calTemp();
 
-
-        int i = 5;
-        Multi multi = new Multi(i*1024,i*1024,1024,6);
+        Multi multi = new Multi(100,100,100,6);
         multi.calTemp();
     }
 

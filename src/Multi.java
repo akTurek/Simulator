@@ -39,6 +39,8 @@ public class Multi {
         }
 
         long t1 = System.currentTimeMillis();
+
+        matrikaCelic.matrikaJPG("multi");
         //matrikaCelic.printMatriko();
         System.out.println("Trajanje programa v ms: " +(t1-t0));
     }
