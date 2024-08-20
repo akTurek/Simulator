@@ -6,9 +6,7 @@ public class Sekvencno {
         this.matrikaCelic = new MatrikaCelic(row, col, numOfHeat);
     }
 
-    public MatrikaCelic getMatrikaCelic() {
-        return matrikaCelic;
-    }
+
 
     public void calTemp() {
         float maxChange;

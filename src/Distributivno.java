@@ -8,10 +8,11 @@ public class Distributivno {
         MPI.Init(args);
         int rank = MPI.COMM_WORLD.Rank();
         int size = MPI.COMM_WORLD.Size();
+
         
-        int rows = 6000; // Number of rows
-        int cols = 6000; // Number of columns
-        int heatSources = 1000; // Number of columns
+        int rows = 100; // Number of rows
+        int cols = 100; // Number of columns
+        int heatSources = 10; // Number of columns
 
         long t0 = System.currentTimeMillis();
         int c = 0;
@@ -46,9 +47,10 @@ public class Distributivno {
         int[] sendIsOverInt = new int[1];  // za posiljanje ali so konec
         boolean isOver = false;  // za while loop ali so konec 
 
+        MatrikaCelic matrikaCelic = null;
         // rank0 ustvari matriko in jo razdeli na 1D arraye 
         if (rank == 0) {
-            MatrikaCelic matrikaCelic = new MatrikaCelic(rows, cols, heatSources);  
+            matrikaCelic = new MatrikaCelic(rows, cols, heatSources);
             float[] sendArrayNowTemp = matrikaCelic.matrikaToArrayNowTemp();
             float[] sendArrayPrevTemp = matrikaCelic.matrikaToArrayPrevTemp();
             boolean[] sendArrayIsHeatSource = matrikaCelic.matrikaToArrayIsHeatSource();
@@ -170,8 +172,11 @@ public class Distributivno {
         }
 
         if (rank == 0){
-            MatrikaCelic matrikaCelic = new MatrikaCelic(rows, cols);
             float [] temp = new float[rows*cols];
+            for (int i = 0; i < arrayNowTemp.length; i++) {
+                temp[i] = arrayNowTemp[i];
+            }
+
             for (int i = 1; i < size; i++) {
                 MPI.COMM_WORLD.Recv(temp, displs[i], recvcounts[i], MPI.FLOAT, i, 0);
             }

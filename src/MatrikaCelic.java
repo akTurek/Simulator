@@ -1,6 +1,10 @@
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
-
+import java.awt.image.BufferedImage;
 
 public class MatrikaCelic {
     final int row;
@@ -188,12 +192,27 @@ public class MatrikaCelic {
     }
 
     public void arraysNTToMatrika(float[] arrayNowTemp) {
+        BufferedImage bufferedImage = new BufferedImage(col, row, BufferedImage.TYPE_INT_ARGB);
+
+        Color[] barva = makeColorArray();
+
+
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
-                nowTemp[i][j] = (arrayNowTemp[i * col + j]);
+                float tempTemp = (arrayNowTemp[i * col + j]);
+                nowTemp[i][j] =tempTemp ;
+                bufferedImage.setRGB(i, j, barva[(int) tempTemp].getRGB());
             }
         }
+
+        File outputfile = new File("slika.png");
+        try {
+            ImageIO.write(bufferedImage, "png", outputfile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 
     public void arraysPTToMatrika(float[] arrayPrevTemp) {
         for (int i = 0; i < row; i++) {
@@ -202,6 +221,36 @@ public class MatrikaCelic {
             }
         }
 
+    }
+
+    public Color[] makeColorArray(){
+        Color[] barva = new Color[101];
+
+
+        for (int i = 0; i <= 100; i++) {
+            if (i < 25) { // Temno modra do svetlo modra
+                int r = 0;
+                int g = 0;
+                int b = 139 + (int) ((116 / 25.0) * i); // Spreminjanje modre komponente
+                barva[i] = new Color(r, g, b);
+            } else if (i < 50) { // Svetlo modra do zelena
+                int r = 0;
+                int g = (int) ((255 / 25.0) * (i - 25)); // Spreminjanje zelene komponente
+                int b = 255 - (int) ((255 / 25.0) * (i - 25)); // Spreminjanje modre komponente
+                barva[i] = new Color(r, g, b);
+            } else if (i < 75) { // Zelena do rumena
+                int r = (int) ((255 / 25.0) * (i - 50)); // Spreminjanje rdeče komponente
+                int g = 255;
+                int b = 0;
+                barva[i] = new Color(r, g, b);
+            } else { // Rumena do rdeča
+                int r = 255;
+                int g = 255 - (int) ((255 / 25.0) * (i - 75)); // Spreminjanje zelene komponente
+                int b = 0;
+                barva[i] = new Color(r, g, b);
+            }
+        }
+        return barva;
     }
 
 }
