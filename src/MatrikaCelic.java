@@ -68,7 +68,7 @@ public class MatrikaCelic {
             }
         }
 
-        Random rand = new Random();
+        Random rand = new Random(7);
         int count = 0;
         while (count < numOfHeat) {
             int randomRow = rand.nextInt(row);
@@ -205,7 +205,7 @@ public class MatrikaCelic {
 
 
     public void matrikaJPG(String ime) {
-        BufferedImage bufferedImage = new BufferedImage(col, row, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage bufferedImage = new BufferedImage(row, col, BufferedImage.TYPE_INT_ARGB);
         Color[] barva = makeColorArray();
 
         for (int i = 0; i < row; i++) {

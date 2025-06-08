@@ -18,6 +18,8 @@ public class Multi {
     public void calTemp() {
 
         long t0 = System.currentTimeMillis();
+        Runnable reset = () -> this.isOver.set(true);
+        CyclicBarrier cyclicBarrierStart = new CyclicBarrier(numberOfThreads, reset);
         CyclicBarrier cyclicBarrier = new CyclicBarrier(numberOfThreads);
 
         ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
@@ -25,7 +27,7 @@ public class Multi {
         // Dodaj taske
         for (int i = 0; i < numberOfThreads; i++) {
             //Nad skupnim objektom brez konflikta, druge lokacijem, ali pa pregrada
-            Runnable task = new Task(this, i, cyclicBarrier);
+            Runnable task = new Task(this, i, cyclicBarrier, cyclicBarrierStart);
             executorService.submit(task);
         }
 

@@ -89,7 +89,7 @@ public class MatrikaCelicDistributivno {
             }
         }
 
-        if (maxChange <= 0.25) {
+        if (maxChange <= 0.25F) {
             return 1;
         } else {
             return 0;
@@ -127,7 +127,7 @@ public class MatrikaCelicDistributivno {
                 }
             }
         }
-        if (maxChange <= 0.25) {
+        if (maxChange <= 0.25F) {
             return 1;
         } else {
             return 0;
@@ -163,7 +163,7 @@ public class MatrikaCelicDistributivno {
                 }
             }
         }
-        if (maxChange <= 0.25) {
+        if (maxChange <= 0.25F) {
             return 1;
         } else {
             return 0;

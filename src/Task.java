@@ -7,8 +7,9 @@ class Task implements Runnable {
     private int endRow;
     private int rows, cols;
     CyclicBarrier cyclicBarrier;
+    CyclicBarrier cyclicBarrierStart;
 
-    public Task(Multi multi, int taskId, CyclicBarrier cyclicBarrier) {
+    public Task(Multi multi, int taskId, CyclicBarrier cyclicBarrier, CyclicBarrier cyclicBarrierStart) {
         this.multi = multi;
         this.taskId = taskId;
         this.startRow = taskId * (multi.matrikaCelic.row) / (multi.numberOfThreads);
@@ -16,6 +17,7 @@ class Task implements Runnable {
         this.rows = multi.matrikaCelic.row;
         this.cols = multi.matrikaCelic.col;
         this.cyclicBarrier = cyclicBarrier;
+        this.cyclicBarrierStart = cyclicBarrierStart;
     }
 
 
@@ -37,9 +39,9 @@ class Task implements Runnable {
                 }
             }
 
-            //Barrier
+            //Barrier///////////////////////////////////////////////////////////////////////////////
             try {
-                cyclicBarrier.await();
+                cyclicBarrierStart.await();
             } catch (InterruptedException | BrokenBarrierException e) {
                 Thread.currentThread().interrupt();
                 System.err.println("Thread interrupted or barrier broken");
@@ -47,7 +49,8 @@ class Task implements Runnable {
 
 
             maxChange = 0.F;
-            multi.isOver.set(true);
+
+
             //calNowTemp
             for (int i = startRow; i < endRow; i++) {
                 for (int j = 0; j < cols; j++) {
@@ -59,21 +62,22 @@ class Task implements Runnable {
                 }
             }
 
-            if (maxChange > 0.25){
+            if (maxChange > 0.25F){
                 multi.isOver.set(false);
+                System.out.println(maxChange + " set false "+taskId);
             }
 
-
-            //Barrier
+            //Barrier//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             try {
                 cyclicBarrier.await();
             } catch (InterruptedException | BrokenBarrierException e) {
                 Thread.currentThread().interrupt();
                 System.err.println("Thread interrupted or barrier broken");
             }
-            //System.out.println("max temp change: " + maxChange+ " is over "+ multi.isOver.get()+" thread "+taskId);
+
+
         } while (!multi.isOver.get());
-        System.out.println("stevilo cikljev "+c);
+        System.out.println("max temp change: " + maxChange+ " is over "+ multi.isOver.get()+" thread "+taskId+"stevilo cikljev "+c);
     }
 
 }

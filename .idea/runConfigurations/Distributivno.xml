@@ -1,0 +1,13 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Distributivno" type="Application" factoryName="Application">
+    <envs>
+      <env name="MPJ_HOME" value="$PROJECT_DIR$/mpj/mpj-v0_44" />
+    </envs>
+    <option name="MAIN_CLASS_NAME" value="Distributivno" />
+    <module name="Simulator3" />
+    <option name="VM_PARAMETERS" value="-jar $MPJ_HOME$/lib/starter.jar -np 6" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
