@@ -70,7 +70,7 @@ public class MatrikaCelicDistributivno {
     }
 
     public int calNowTempMiddle() {
-        float maxChange = 0;
+        float maxChange = 0.F;
         float change;
 
         for (int i = 0; i < arraySize; i++) {
@@ -89,7 +89,7 @@ public class MatrikaCelicDistributivno {
             }
         }
 
-        if (maxChange <= 0.25F) {
+        if (maxChange < 0.25F) {
             return 1;
         } else {
             return 0;
@@ -111,7 +111,7 @@ public class MatrikaCelicDistributivno {
     }
 
     public int calNowTempFirst() {
-        float maxChange = 0;
+        float maxChange = 0.F;
         float change;
         for (int i = 0; i < arraySize; i++) {
             if (!arrayIsHeatSourc[i]) {
@@ -127,7 +127,7 @@ public class MatrikaCelicDistributivno {
                 }
             }
         }
-        if (maxChange <= 0.25F) {
+        if (maxChange < 0.25F) {
             return 1;
         } else {
             return 0;
@@ -147,7 +147,7 @@ public class MatrikaCelicDistributivno {
     }
 
     public int calNowTempLast() {
-        float maxChange = 0;
+        float maxChange = 0.F;
         float change;
         for (int i = 0; i < arraySize; i++) {
             if (!arrayIsHeatSourc[i]) {
@@ -163,7 +163,7 @@ public class MatrikaCelicDistributivno {
                 }
             }
         }
-        if (maxChange <= 0.25F) {
+        if (maxChange < 0.25F) {
             return 1;
         } else {
             return 0;

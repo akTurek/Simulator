@@ -28,7 +28,7 @@ class Task implements Runnable {
         int c = 0;
 
         do {
-            c++;
+
             //System.out.println("racunam "+taskId);
             //calPrevTemp
 
@@ -56,12 +56,13 @@ class Task implements Runnable {
                 for (int j = 0; j < cols; j++) {
                     multi.matrikaCelic.calNowTemp(i, j);
                     change = multi.matrikaCelic.getTempChange(i,j);
+
                     if (change > maxChange) {
                         maxChange = change;
                     }
                 }
             }
-
+            c++;
             if (maxChange > 0.25F){
                 multi.isOver.set(false);
                 System.out.println(maxChange + " set false "+taskId);

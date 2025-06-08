@@ -83,7 +83,7 @@ public class Distributivno {
 
 
         while (!isOver) {
-            c++;
+
             isOver = true;
             //poslji in prejme mejne vrednosti sosednjim matrikam
             if (rank != size - 1) {
@@ -108,19 +108,19 @@ public class Distributivno {
 
             arrDis.setLimits(lowLimitPrevTemp, upLimitPrevTemp, lowLimitNowTemp, upLimitNowTemp); // nastavi mejne vrednosti v distributivni matriki
 
-            // racunanje ne cikel
+            // racunanje en cikel
             if (rank == 0) {
                 sendIsOverInt[0] = arrDis.enCikelSumulacijeFirst();
+                c++;
                 if (sendIsOverInt[0] == 0) {
                     isOver = false;
                 }
             } else if (rank == size - 1) {
-
                 sendIsOverInt[0] = arrDis.enCikelSumulacijeLast();
-
-
+                c++;
             } else {
                 sendIsOverInt[0] = arrDis.enCikelSumulacijeMiddle();
+                c++;
             }
             MPI.COMM_WORLD.Barrier();
 
