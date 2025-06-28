@@ -83,60 +83,6 @@ public class MatrikaCelic {
     }
 
 
-    public void printMatriko() {
-        // Print column headers
-        System.out.print("    ");
-        for (int i = 0; i < col; i++) {
-            System.out.printf("%4d", i);
-        }
-        System.out.println();
-
-        // Print rows
-        for (int h = 0; h < row; h++) {
-            // Print row header
-            System.out.printf("%-4d", h);
-
-            // Print row content
-            for (int k = 0; k < col; k++) {
-                int temp = (int) this.nowTemp[h][k];
-                System.out.printf("%4d", temp);
-            }
-            System.out.println();
-        }
-        System.out.println();
-    }
-
-    public void printMatrikoGraficno() {
-        // Print column headers
-        System.out.print("    ");
-        for (int i = 0; i < col; i++) {
-            System.out.printf("%3d", i);
-        }
-        System.out.println();
-
-        // Define symbols for different temperature ranges
-        String[] symbols = {"   ", "...", ";;;", "ooo", "&&&", "OOO", "XXX", "##", "$", "@@@"};
-
-        // Print rows
-        for (int h = 0; h < row; h++) {
-            // Print row header
-            System.out.printf("%-3d", h);
-
-            // Print row content
-            for (int k = 0; k < col; k++) {
-                int temp = (int) (this.nowTemp[h][k]/10);
-                String symbol;
-                if (temp >= 0 && temp < symbols.length) {
-                    symbol = symbols[temp];
-                } else {
-                    symbol = symbols[symbols.length - 1]; // Use the highest symbol for out-of-range temperatures
-                }
-                System.out.print(symbol); // Changed printf to print
-            }
-            System.out.println();
-        }
-        System.out.println();
-    }
 
 
     public void calNowTemp(int i, int j) {

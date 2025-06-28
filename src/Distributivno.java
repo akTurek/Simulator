@@ -10,7 +10,7 @@ public class Distributivno {
         int size = MPI.COMM_WORLD.Size();
 
         
-        int rows = 200; // Number of rows
+        int rows = 100; // Number of rows
         int cols = 100; // Number of columns
         int heatSources = 100; // Number of columns
 
@@ -43,9 +43,8 @@ public class Distributivno {
         float[] upLimitNowTemp = new float[cols];   //  MEJNE VREDNOSTI KI JIH RABI ZA RACUNATI A JIH IMA SOSENJA MATRIKA
         float[] lowLimitPrevTemp = new float[cols]; //  MEJNE VREDNOSTI KI JIH RABI ZA RACUNATI A JIH IMA SOSENJA MATRIKA
         float[] upLimitPrevTemp = new float[cols]; //  MEJNE VREDNOSTI KI JIH RABI ZA RACUNATI A JIH IMA SOSENJA MATRIKA
-        int[] recvIsOverInt = new int[1];  // za preverejanje rank0 ali so vsi procesi konec ali je konec
-        int[] sendIsOverInt = new int[1];  // za posiljanje ali so konec
-        boolean isOver = false;  // za while loop ali so konec 
+        float maxChamge;
+        float globalMax;
 
         MatrikaCelic matrikaCelic = null;
         // rank0 ustvari matriko in jo razdeli na 1D arraye 
@@ -77,96 +76,69 @@ public class Distributivno {
             arrDis.setArrays(arrayPrevTemp,arrayNowTemp,arrayIsHeatSource);
         }
 
-        //System.out.println("Prejel arraje  rank" + rank + " velikosti prev temp " +arrayPrevTemp.length+ " velikosti now temp " +arrayNowTemp.length+ " velikosti hs " +arrayIsHeatSource.length );
+        System.out.println("Prejel arraje  rank" + rank + " velikosti prev temp " +arrayPrevTemp.length+ " velikosti now temp " +arrayNowTemp.length+ " velikosti hs " +arrayIsHeatSource.length );
         MPI.COMM_WORLD.Barrier();
         arrDis.setArrays(arrayPrevTemp,arrayNowTemp,arrayIsHeatSource);
 
-
-        while (!isOver) {
-
-            isOver = true;
+        do {
+            c++;
             //poslji in prejme mejne vrednosti sosednjim matrikam
             if (rank != size - 1) {
-                MPI.COMM_WORLD.Send(arrayNowTemp, recvcounts[rank] - cols, cols, MPI.FLOAT, rank + 1, 1);
                 MPI.COMM_WORLD.Send(arrayPrevTemp, recvcounts[rank] - cols, cols, MPI.FLOAT, rank + 1, 0);
             }
             if (rank != 0) {
-                MPI.COMM_WORLD.Recv(lowLimitNowTemp, 0, cols, MPI.FLOAT, rank - 1, 1);
+
                 MPI.COMM_WORLD.Recv(lowLimitPrevTemp, 0, cols, MPI.FLOAT, rank - 1, 0);
             }
             MPI.COMM_WORLD.Barrier();
 
             if (rank != 0) {
-                MPI.COMM_WORLD.Send(arrayNowTemp, 0, cols, MPI.FLOAT, rank - 1, 1);
+
                 MPI.COMM_WORLD.Send(arrayPrevTemp, 0, cols, MPI.FLOAT, rank - 1, 0);
             }
             if (rank != size - 1) {
-                MPI.COMM_WORLD.Recv(upLimitNowTemp, 0, cols, MPI.FLOAT, rank + 1, 1);
+
                 MPI.COMM_WORLD.Recv(upLimitPrevTemp, 0, cols, MPI.FLOAT, rank + 1, 0);
             }
             MPI.COMM_WORLD.Barrier();
 
-            arrDis.setLimits(lowLimitPrevTemp, upLimitPrevTemp, lowLimitNowTemp, upLimitNowTemp); // nastavi mejne vrednosti v distributivni matriki
+            arrDis.setLimits(lowLimitPrevTemp, upLimitPrevTemp); // nastavi mejne vrednosti v distributivni matriki
 
             // racunanje en cikel
             if (rank == 0) {
-                sendIsOverInt[0] = arrDis.enCikelSumulacijeFirst();
-                c++;
-                if (sendIsOverInt[0] == 0) {
-                    isOver = false;
-                }
+                maxChamge = arrDis.enCikelSumulacijeFirst();
+
+
             } else if (rank == size - 1) {
-                sendIsOverInt[0] = arrDis.enCikelSumulacijeLast();
-                c++;
+                maxChamge = arrDis.enCikelSumulacijeLast();
+
             } else {
-                sendIsOverInt[0] = arrDis.enCikelSumulacijeMiddle();
-                c++;
-            }
-            MPI.COMM_WORLD.Barrier();
+                maxChamge = arrDis.enCikelSumulacijeMiddle();
 
-            // posiljanje rangu0 ali so konec
-            if (rank > 0) {
-                MPI.COMM_WORLD.Send(sendIsOverInt, 0, 1, MPI.INT, 0, 2);
             }
 
-            // prejemanje ali so vsi procesi konec
-            if (rank == 0) {
-                for (int i = 1; i < size; i++) {
-                    MPI.COMM_WORLD.Recv(recvIsOverInt, 0, 1, MPI.INT, i, 2); // Receive integer
-                    if (recvIsOverInt[0] == 0) {
-                        isOver = false;
-                    }
-                }
-            }
-            MPI.COMM_WORLD.Barrier();
+            System.out.println("Rank "+rank+" maxChange "+maxChamge);
 
-            // sporocanje vstalim ali je konec simulacije
-            if (rank == 0) {
-                if (!isOver) {
-                    sendIsOverInt[0] = 0;
-                }
-                for (int i = 1; i < size; i++) {
-                    MPI.COMM_WORLD.Send(sendIsOverInt, 0, 1, MPI.INT, i, 2); // Send integer
-                }
-            }
+            float[] sendBuf = new float[] {maxChamge};
+            float[] recvBuf = new float[1];
+            MPI.COMM_WORLD.Allreduce(
+                    sendBuf, 0,
+                    recvBuf, 0,
+                    1, MPI.FLOAT, MPI.MAX
+            );
+            globalMax = recvBuf[0];
 
-            // prejemanje ali je konec simulacije
-            if (rank > 0) {
-                MPI.COMM_WORLD.Recv(recvIsOverInt, 0, 1, MPI.INT, 0, 2); // Receive integer
-                if (recvIsOverInt[0] == 0) {
-                    isOver = false;
-                }
-            }
             MPI.COMM_WORLD.Barrier();
 
             // kazi na nove izracunane vrdnosti da v naslednji zanki posiljajo nove vredne mejnosti
             arrayNowTemp = arrDis.getArrayNowTemp();
             arrayPrevTemp = arrDis.getArrayPrevTemp();
+            System.out.println("/////");
 
 
-        }
+        }while (globalMax > 0.25);
 
-
+        //sestavi 2dmatriko
         if (rank > 0){
             MPI.COMM_WORLD.Send(arrayNowTemp, 0, arrayNowTemp.length, MPI.FLOAT, 0 , 0);
         }
