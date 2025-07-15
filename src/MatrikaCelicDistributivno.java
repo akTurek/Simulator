@@ -7,10 +7,8 @@ public class MatrikaCelicDistributivno {
     float[] lowLimitPrevTemp;
     float[] upLimitPrevTemp;
 
-
     int arraySize;
     int cols;
-
     int startIndexOfLastRow;
 
 
@@ -26,7 +24,6 @@ public class MatrikaCelicDistributivno {
         this.arraySize = arraySize;
         this.lowLimitPrevTemp = new float[cols];
         this.upLimitPrevTemp = new float[cols];
-
 
     }
 

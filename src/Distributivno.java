@@ -10,9 +10,9 @@ public class Distributivno {
         int size = MPI.COMM_WORLD.Size();
 
         
-        int rows = 100; // Number of rows
-        int cols = 100; // Number of columns
-        int heatSources = 100; // Number of columns
+        int rows = 1000; // Number of rows
+        int cols = 1000; // Number of columns
+        int heatSources = 1000; // Number of columns
 
         long t0 = System.currentTimeMillis();
         int c = 0;
@@ -39,8 +39,6 @@ public class Distributivno {
         float[] arrayNowTemp = new float[recvcounts[rank]]; // Receive buffer for arrayNowTemp
         float[] arrayPrevTemp = new float[recvcounts[rank]]; // Receive buffer for arrayPrevTemp
         boolean[] arrayIsHeatSource = new boolean[recvcounts[rank]]; // Receive buffer for arrayIsHeatSource
-        float[] lowLimitNowTemp = new float[cols];  //  MEJNE VREDNOSTI KI JIH RABI ZA RACUNATI A JIH IMA SOSENJA MATRIKA
-        float[] upLimitNowTemp = new float[cols];   //  MEJNE VREDNOSTI KI JIH RABI ZA RACUNATI A JIH IMA SOSENJA MATRIKA
         float[] lowLimitPrevTemp = new float[cols]; //  MEJNE VREDNOSTI KI JIH RABI ZA RACUNATI A JIH IMA SOSENJA MATRIKA
         float[] upLimitPrevTemp = new float[cols]; //  MEJNE VREDNOSTI KI JIH RABI ZA RACUNATI A JIH IMA SOSENJA MATRIKA
         float maxChamge;
@@ -76,7 +74,7 @@ public class Distributivno {
             arrDis.setArrays(arrayPrevTemp,arrayNowTemp,arrayIsHeatSource);
         }
 
-        System.out.println("Prejel arraje  rank" + rank + " velikosti prev temp " +arrayPrevTemp.length+ " velikosti now temp " +arrayNowTemp.length+ " velikosti hs " +arrayIsHeatSource.length );
+        //System.out.println("Prejel arraje  rank" + rank + " velikosti prev temp " +arrayPrevTemp.length+ " velikosti now temp " +arrayNowTemp.length+ " velikosti hs " +arrayIsHeatSource.length );
         MPI.COMM_WORLD.Barrier();
         arrDis.setArrays(arrayPrevTemp,arrayNowTemp,arrayIsHeatSource);
 
@@ -87,19 +85,18 @@ public class Distributivno {
                 MPI.COMM_WORLD.Send(arrayPrevTemp, recvcounts[rank] - cols, cols, MPI.FLOAT, rank + 1, 0);
             }
             if (rank != 0) {
-
                 MPI.COMM_WORLD.Recv(lowLimitPrevTemp, 0, cols, MPI.FLOAT, rank - 1, 0);
             }
+
             MPI.COMM_WORLD.Barrier();
 
             if (rank != 0) {
-
                 MPI.COMM_WORLD.Send(arrayPrevTemp, 0, cols, MPI.FLOAT, rank - 1, 0);
             }
             if (rank != size - 1) {
-
                 MPI.COMM_WORLD.Recv(upLimitPrevTemp, 0, cols, MPI.FLOAT, rank + 1, 0);
             }
+
             MPI.COMM_WORLD.Barrier();
 
             arrDis.setLimits(lowLimitPrevTemp, upLimitPrevTemp); // nastavi mejne vrednosti v distributivni matriki
@@ -107,17 +104,13 @@ public class Distributivno {
             // racunanje en cikel
             if (rank == 0) {
                 maxChamge = arrDis.enCikelSumulacijeFirst();
-
-
             } else if (rank == size - 1) {
                 maxChamge = arrDis.enCikelSumulacijeLast();
-
             } else {
                 maxChamge = arrDis.enCikelSumulacijeMiddle();
-
             }
 
-            System.out.println("Rank "+rank+" maxChange "+maxChamge);
+            //System.out.println("Rank "+rank+" maxChange "+maxChamge);
 
             float[] sendBuf = new float[] {maxChamge};
             float[] recvBuf = new float[1];
@@ -133,8 +126,7 @@ public class Distributivno {
             // kazi na nove izracunane vrdnosti da v naslednji zanki posiljajo nove vredne mejnosti
             arrayNowTemp = arrDis.getArrayNowTemp();
             arrayPrevTemp = arrDis.getArrayPrevTemp();
-            System.out.println("/////");
-
+            //System.out.println("/////");
 
         }while (globalMax > 0.25);
 
@@ -153,7 +145,8 @@ public class Distributivno {
                 MPI.COMM_WORLD.Recv(temp, displs[i], recvcounts[i], MPI.FLOAT, i, 0);
             }
             matrikaCelic.arraysNTToMatrika(temp);
-            matrikaCelic.matrikaJPG("dist");
+            //matrikaCelic.matrikaJPG("dist");
+
 
 
         }

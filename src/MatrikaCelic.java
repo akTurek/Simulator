@@ -20,11 +20,9 @@ public class MatrikaCelic {
         this.row = row;
         this.col = col;
         this.numOfHeat = numOfHeat;
-
         this.prevTemp = new float[row][col];
         this.nowTemp = new float[row][col];
         this.isHeatSource = new boolean[row][col];
-
         narediMatriko();
 
     }
@@ -32,7 +30,6 @@ public class MatrikaCelic {
     public MatrikaCelic(int row, int col) {
         this.row = row;
         this.col = col;
-
         this.prevTemp = new float[row][col];
         this.nowTemp = new float[row][col];
         this.isHeatSource = new boolean[row][col];
@@ -42,14 +39,11 @@ public class MatrikaCelic {
     public int getRow() {
         return row;
     }
-
     public int getCol() {
         return col;
     }
 
-    public void setNowToPrev(){
-        this.prevTemp = this.nowTemp;
-    }
+
 
 
     private void narediMatriko() {

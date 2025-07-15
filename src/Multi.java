@@ -8,9 +8,9 @@ public class Multi {
     public AtomicBoolean isOver;
 
 
-    public Multi(int row, int col, int numOfHeat, int numberOfThreads) {
+    public Multi(int row, int col, int numOfHeat) {
         this.matrikaCelic = new MatrikaCelic(row, col, numOfHeat);
-        this.numberOfThreads = numberOfThreads;
+        this.numberOfThreads = Runtime.getRuntime().availableProcessors();
         this.isOver = new AtomicBoolean(false);
     }
 
@@ -42,9 +42,10 @@ public class Multi {
 
         long t1 = System.currentTimeMillis();
 
-        matrikaCelic.matrikaJPG("multi");
-        //matrikaCelic.printMatriko();
+
         System.out.println("Trajanje programa v ms: " +(t1-t0));
+
+        //matrikaCelic.matrikaJPG("multi");
     }
 }
 

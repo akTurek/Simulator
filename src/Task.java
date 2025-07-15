@@ -20,7 +20,6 @@ class Task implements Runnable {
         this.cyclicBarrierStart = cyclicBarrierStart;
     }
 
-
     @Override
     public void run() {
         float change;
@@ -44,12 +43,10 @@ class Task implements Runnable {
                 cyclicBarrierStart.await();
             } catch (InterruptedException | BrokenBarrierException e) {
                 Thread.currentThread().interrupt();
-                System.err.println("Thread interrupted or barrier broken");
+                //System.err.println("Thread interrupted or barrier broken");
             }
 
-
             maxChange = 0.F;
-
 
             //calNowTemp
             for (int i = startRow; i < endRow; i++) {
@@ -65,20 +62,17 @@ class Task implements Runnable {
             c++;
             if (maxChange > 0.25F){
                 multi.isOver.set(false);
-                System.out.println(maxChange + " set false "+taskId);
+                //System.out.println(maxChange + " set false "+taskId);
             }
-
             //Barrier//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             try {
                 cyclicBarrier.await();
             } catch (InterruptedException | BrokenBarrierException e) {
                 Thread.currentThread().interrupt();
-                System.err.println("Thread interrupted or barrier broken");
+                //System.err.println("Thread interrupted or barrier broken");
             }
-
 
         } while (!multi.isOver.get());
         System.out.println("max temp change: " + maxChange+ " is over "+ multi.isOver.get()+" thread "+taskId+"stevilo cikljev "+c);
     }
-
 }
