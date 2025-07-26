@@ -5,7 +5,7 @@
     </envs>
     <option name="MAIN_CLASS_NAME" value="Distributivno" />
     <module name="Simulator3" />
-    <option name="VM_PARAMETERS" value="-jar $MPJ_HOME$/lib/starter.jar -np 6" />
+    <option name="VM_PARAMETERS" value="-jar $PROJECT_DIR$/mpj/mpj-v0_44/lib/starter.jar -np 6 -javaagent:$APPLICATION_HOME_DIR$/lib/idea_rt.jar=44697 -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 -classpath $PROJECT_DIR$/out/production/Simulator3:$PROJECT_DIR$/mpj/mpj-v0_44/lib/mpi.jar:$PROJECT_DIR$/mpj/mpj-v0_44/lib/mpj.jar:$PROJECT_DIR$/mpj/mpj-v0_44/lib/xdev.jar:$PROJECT_DIR$/mpj/mpj-v0_44/lib/mxdev.jar:$PROJECT_DIR$/mpj/mpj-v0_44/lib/tools.jar:$PROJECT_DIR$/mpj/mpj-v0_44/lib/daemon.jar:$PROJECT_DIR$/mpj/mpj-v0_44/lib/hybdev.jar:$PROJECT_DIR$/mpj/mpj-v0_44/lib/mpiExp.jar:$PROJECT_DIR$/mpj/mpj-v0_44/lib/mpjbuf.jar:$PROJECT_DIR$/mpj/mpj-v0_44/lib/mpjdev.jar:$PROJECT_DIR$/mpj/mpj-v0_44/lib/niodev.jar:$PROJECT_DIR$/mpj/mpj-v0_44/lib/smpdev.jar:$PROJECT_DIR$/mpj/mpj-v0_44/lib/loader1.jar:$PROJECT_DIR$/mpj/mpj-v0_44/lib/loader2.jar:$PROJECT_DIR$/mpj/mpj-v0_44/lib/starter.jar:$PROJECT_DIR$/mpj/mpj-v0_44/lib/log4j-1.2.11.jar:$PROJECT_DIR$/mpj/mpj-v0_44/lib/daemonmanager.jar:$PROJECT_DIR$/mpj/mpj-v0_44/lib/javax.servlet.jar:$PROJECT_DIR$/mpj/mpj-v0_44/lib/runtimecommon.jar:$PROJECT_DIR$/mpj/mpj-v0_44/lib/commons-io-2.4.jar:$PROJECT_DIR$/mpj/mpj-v0_44/lib/commons-cli-1.2.jar:$PROJECT_DIR$/mpj/mpj-v0_44/lib/commons-codec-1.8.jar Distributivno " />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

@@ -60,9 +60,8 @@ class Task implements Runnable {
                 }
             }
             c++;
-            if (maxChange > 0.25F){
-                multi.isOver.set(false);
-                //System.out.println(maxChange + " set false "+taskId);
+            if (maxChange > 0.25F && multi.isOver.get()){
+               multi.isOver.set(false);
             }
             //Barrier//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             try {

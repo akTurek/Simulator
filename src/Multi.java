@@ -19,7 +19,7 @@ public class Multi {
 
         long t0 = System.currentTimeMillis();
         Runnable reset = () -> this.isOver.set(true);
-        CyclicBarrier cyclicBarrierStart = new CyclicBarrier(numberOfThreads, reset);
+        CyclicBarrier cyclicBarrierStart = new CyclicBarrier(numberOfThreads,reset);
         CyclicBarrier cyclicBarrier = new CyclicBarrier(numberOfThreads);
 
         ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
